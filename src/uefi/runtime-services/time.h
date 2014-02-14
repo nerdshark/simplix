@@ -15,12 +15,32 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "uefi/uefi.h"
+#ifndef UEFI_RUN_TIME_H
+#define UEFI_RUN_TIME_H
 
-extern "C" EFI_STATUS EFIAPI kmain(EFI_HANDLE handle, EFI_SYSTEM_TABLE *systab)
-{
-    systab->ConOut->OutputString(systab->ConOut, u"Welcome to Simplix!\r\n");
+#include "../types.h"
 
-    asm volatile ("cli \n\t hlt");
-    return EFI_SUCCESS;
-}
+#define EFI_TIME_ADJUST_DAYLIGHT 0x01
+#define EFI_TIME_IN_DAYLIGHT 0x02
+
+#define EFI_UNSPECIFIED_TIMEZONE 0x07FF
+
+struct EFI_TIME_CAPABILITIES {
+    UINT32 Resolution;
+    UINT32 Accuracy;
+    BOOLEAN SetsToZero;
+};
+
+typedef EFI_STATUS (EFIAPI *EFI_GET_TIME)
+(EFI_TIME *Time, EFI_TIME_CAPABILITIES *Capabilities);
+
+typedef EFI_STATUS (EFIAPI *EFI_SET_TIME)
+(EFI_TIME *Time);
+
+typedef EFI_STATUS (EFIAPI *EFI_GET_WAKEUP_TIME)
+(BOOLEAN *Enabled, BOOLEAN *Pending, EFI_TIME *Time);
+
+typedef EFI_STATUS (EFIAPI *EFI_SET_WAKEUP_TIME)
+(BOOLEAN Enable, EFI_TIME *Time);
+
+#endif // UEFI_RUN_TIME_H

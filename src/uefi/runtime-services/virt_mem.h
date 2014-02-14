@@ -15,12 +15,18 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "uefi/uefi.h"
+#ifndef UEFI_RUN_VIRT_MEM_H
+#define UEFI_RUN_VIRT_MEM_H
 
-extern "C" EFI_STATUS EFIAPI kmain(EFI_HANDLE handle, EFI_SYSTEM_TABLE *systab)
-{
-    systab->ConOut->OutputString(systab->ConOut, u"Welcome to Simplix!\r\n");
+#include "../types.h"
 
-    asm volatile ("cli \n\t hlt");
-    return EFI_SUCCESS;
-}
+#define EFI_OPTIONAL_PTR 0x00000001
+
+typedef EFI_STATUS (EFIAPI *EFI_SET_VIRTUAL_ADDRESS_MAP)
+(UINTN MemoryMapSize, UINTN DescriptorSize, UINT32 DescriptorVersion,
+ EFI_MEMORY_DESCRIPTOR *VirtualMap);
+
+typedef EFI_STATUS (EFIAPI *EFI_CONVERT_POINTER)
+(UINTN DebugDisposition, VOID **Address);
+
+#endif // UEFI_RUN_VIRT_MEM_H

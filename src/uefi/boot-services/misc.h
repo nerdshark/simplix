@@ -15,12 +15,30 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "uefi/uefi.h"
+#ifndef UEFI_BOOT_MISC_H
+#define UEFI_BOOT_MISC_H
 
-extern "C" EFI_STATUS EFIAPI kmain(EFI_HANDLE handle, EFI_SYSTEM_TABLE *systab)
-{
-    systab->ConOut->OutputString(systab->ConOut, u"Welcome to Simplix!\r\n");
+#include "../types.h"
 
-    asm volatile ("cli \n\t hlt");
-    return EFI_SUCCESS;
-}
+typedef EFI_STATUS (EFIAPI *EFI_SET_WATCHDOG_TIMER)
+(UINTN Timeout, UINT64 WatchdogCode, UINTN DataSize, CHAR16 *WatchdogData);
+
+typedef EFI_STATUS (EFIAPI *EFI_STALL)
+(UINTN Microseconds);
+
+typedef VOID (EFIAPI *EFI_COPY_MEM)
+(VOID *Destination, VOID *Source, UINTN Length);
+
+typedef VOID (EFIAPI *EFI_SET_MEM)
+(VOID *Buffer, UINTN Size, UINT8 Value);
+
+typedef EFI_STATUS (EFIAPI *EFI_GET_NEXT_MONOTONIC_COUNT)
+(UINT64 *Count);
+
+typedef EFI_STATUS (EFIAPI *EFI_INSTALL_CONFIGURATION_TABLE)
+(EFI_GUID *Guid, VOID *Table);
+
+typedef EFI_STATUS (EFIAPI *EFI_CALCULATE_CRC32)
+(VOID *Data, UINTN DataSize, UINT32 *Crc32);
+
+#endif // UEFI_BOOT_MISC_H

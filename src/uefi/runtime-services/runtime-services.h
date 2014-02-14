@@ -15,12 +15,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "uefi/uefi.h"
+#ifndef UEFI_RUN_RUNTIMESERVICES_H
+#define UEFI_RUN_RUNTIMESERVICES_H
 
-extern "C" EFI_STATUS EFIAPI kmain(EFI_HANDLE handle, EFI_SYSTEM_TABLE *systab)
-{
-    systab->ConOut->OutputString(systab->ConOut, u"Welcome to Simplix!\r\n");
+#include "misc.h"
+#include "time.h"
+#include "variable.h"
+#include "virt_mem.h"
 
-    asm volatile ("cli \n\t hlt");
-    return EFI_SUCCESS;
-}
+#endif // UEFI_RUN_RUNTIMESERVICES_H
