@@ -17,9 +17,10 @@
 
 #include "uefi/uefi.h"
 
-extern "C" EFI_STATUS EFIAPI kmain(EFI_HANDLE handle, EFI_SYSTEM_TABLE *systab)
+extern "C"
+EFI_STATUS EFIAPI kmain(EFI_HANDLE handle, EFI_SYSTEM_TABLE *systab)
 {
-    systab->ConOut->OutputString(systab->ConOut, u"Welcome to Simplix!\r\n");
+    UEFI::print(systab->ConOut, u"Welcome to Simplix!\r\n");
 
     asm volatile ("cli \n\t hlt");
     return EFI_SUCCESS;
