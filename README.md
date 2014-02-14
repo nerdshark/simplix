@@ -29,6 +29,6 @@ So, how to actually run simplix in qemu? Simply execute the following commands:
 - sudo mkdir ./mnt/EFI
 - sudo mkdir ./mnt/EFI/BOOT
 - sudo cp simplix.efi ./mnt/EFI/BOOT/BOOTx64.EFI
-- sudo umount /mnt
+- sudo umount ./mnt
 
 Then, start qemu with: qemu-system-x86-64 -bios \<path-to-OVMF.fd\> -cdrom ./disk  
