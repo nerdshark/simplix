@@ -1,5 +1,5 @@
 VPATH = src
-OBJECTS = kernel.o
+OBJECTS = kernel.o error.o string.o ctype.o math.o stdlib.o
 
 CXX = x86_64-w64-mingw32-g++
 LD = x86_64-w64-mingw32-ld
