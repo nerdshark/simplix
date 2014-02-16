@@ -213,7 +213,7 @@ unsigned long long strtoull(const char *nptr, char **endptr, int base, Error &er
 {
     uintmax_t val = strtoumax(nptr, endptr, base, err);
 
-    if (val > ULLONG_MAX || err.code() == Error::ERANGE) {
+    if (val > ULLONG_MAX) {
         err.set_code(Error::ERANGE);
         return ULLONG_MAX;
     }
@@ -225,11 +225,11 @@ long long strtoll(const char *nptr, char **endptr, int base, Error &err)
 {
     intmax_t val = strtoimax(nptr, endptr, base, err);
 
-    if (val > LLONG_MAX || err.code() == Error::ERANGE) {
+    if (val > LLONG_MAX) {
         err.set_code(Error::ERANGE);
         return LLONG_MAX;
     }
-    if (val < LLONG_MIN || err.code() == Error::ERANGE) {
+    if (val < LLONG_MIN) {
         err.set_code(Error::ERANGE);
         return LLONG_MIN;
     }
@@ -241,11 +241,11 @@ long strtol(const char *nptr, char **endptr, int base, Error &err)
 {
     intmax_t val = strtoimax(nptr, endptr, base, err);
 
-    if (val > LONG_MAX || err.code() == Error::ERANGE) {
+    if (val > LONG_MAX) {
         err.set_code(Error::ERANGE);
         return LONG_MAX;
     }
-    if (val < LONG_MIN || err.code() == Error::ERANGE) {
+    if (val < LONG_MIN) {
         err.set_code(Error::ERANGE);
         return LONG_MIN;
     }
@@ -257,7 +257,7 @@ unsigned long strtoul(const char *nptr, char **endptr, int base, Error &err)
 {
     uintmax_t val = strtoumax(nptr, endptr, base, err);
 
-    if (val > ULONG_MAX || err.code() == Error::ERANGE) {
+    if (val > ULONG_MAX) {
         err.set_code(Error::ERANGE);
         return ULONG_MAX;
     }
