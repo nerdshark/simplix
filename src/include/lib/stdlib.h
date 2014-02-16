@@ -15,13 +15,19 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef UEFI_BOOT_BOOTSERVICES_H
-#define UEFI_BOOT_BOOTSERVICES_H
+#ifndef STDLIB_H
+#define STDLIB_H
 
-#include "event.h"
-#include "image_services.h"
-#include "mem_alloc.h"
-#include "misc.h"
-#include "prot_handlers.h"
+#include <climits>
+#include <cstdint>
+#include <lib/error.h>
 
-#endif // UEFI_BOOT_BOOTSERVICES_H
+long strtol(const char *nptr, char **endptr, int base, Error &err);
+long long strtoll(const char *nptr, char **endptr, int base, Error &err);
+intmax_t strtoimax(const char *nptr, char **endptr, int base, Error &err);
+
+unsigned long strtoul(const char *nptr, char **endptr, int base, Error &err);
+unsigned long long strtoull(const char *nptr, char **endptr, int base, Error &err);
+uintmax_t strtoumax(const char *nptr, char **endptr, int base, Error &err);
+
+#endif // STDLIB_H

@@ -16,11 +16,10 @@
  */
 
 #include <climits>
-
-#include "stdlib.h"
-#include "ctype.h"
-#include "math.h"
-#include "string.h"
+#include <lib/stdlib.h>
+#include <lib/ctype.h>
+#include <lib/math.h>
+#include <lib/string.h>
 
 static int char_to_value(char c)
 {

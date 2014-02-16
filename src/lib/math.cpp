@@ -15,20 +15,26 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef STDLIB_H
-#define STDLIB_H
+#include <lib/math.h>
 
-#include <climits>
-#include <cstdint>
+int pow(int x, unsigned int y, Error &err)
+{
+    if (y == 0)
+        return 1;
 
-#include "error.h"
+    int a = x;
+    for (unsigned int i = 1; i < y; ++i) {
+        if (multiply_would_overflow(a, x, INT_MAX)) {
+            err.set_code(Error::ERANGE);
+            return INT_MAX;
+        }
+        if (multiply_would_underflow(a, x, INT_MIN)) {
+            err.set_code(Error::ERANGE);
+            return INT_MIN;
+        }
 
-long strtol(const char *nptr, char **endptr, int base, Error &err);
-long long strtoll(const char *nptr, char **endptr, int base, Error &err);
-intmax_t strtoimax(const char *nptr, char **endptr, int base, Error &err);
+        a *= x;
+    }
 
-unsigned long strtoul(const char *nptr, char **endptr, int base, Error &err);
-unsigned long long strtoull(const char *nptr, char **endptr, int base, Error &err);
-uintmax_t strtoumax(const char *nptr, char **endptr, int base, Error &err);
-
-#endif // STDLIB_H
+    return a;
+}

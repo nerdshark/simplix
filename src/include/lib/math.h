@@ -20,8 +20,7 @@
 
 #include <climits>
 #include <cstdint>
-
-#include "error.h"
+#include <lib/error.h>
 
 int pow(int x, unsigned int y, Error &err);
 
