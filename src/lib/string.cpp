@@ -152,7 +152,8 @@ size_t strspn(const char *s, const char *accept)
 
 size_t strcspn(const char *s, const char *reject)
 {
-    if (*strpbrk(s, reject) == *s)
+    char *p = strpbrk(s, reject);
+    if (p != nullptr && *p == *s)
         return 0;
 
     size_t len = 0;
