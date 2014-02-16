@@ -29,7 +29,7 @@ int iscntrl(int c)
 
 int isdigit(int c)
 {
-    return c >= 1 && c <= 9;
+    return c >= '0' && c <= '9';
 }
 
 int isgraph(int c)
@@ -64,7 +64,7 @@ int isprint(int c)
 
 int isxdigit(int c)
 {
-    return isdigit(c) || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'Z');
+    return isdigit(c) || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
 }
 
 int isspace(int c)
