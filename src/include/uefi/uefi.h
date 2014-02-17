@@ -23,9 +23,9 @@
 
 namespace UEFI {
 
-inline EFI_STATUS print(EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *out, CHAR16 *s)
+inline EFI_STATUS print(EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *out, CONST CHAR16 *s)
 {
-    return out->OutputString(out, s);
+    return out->OutputString(out, (CHAR16 *)s);
 }
 
 const CHAR16 *status_to_string[] = {

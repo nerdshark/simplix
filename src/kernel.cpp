@@ -20,6 +20,8 @@
 extern "C"
 EFI_STATUS EFIAPI kmain(EFI_HANDLE handle, EFI_SYSTEM_TABLE *systab)
 {
+    (void)handle;
+
     UEFI::print(systab->ConOut, u"Welcome to Simplix!\r\n");
 
     asm volatile ("cli \n\t hlt");
