@@ -35,7 +35,8 @@ static int char_to_value(char c)
     return -1;
 }
 
-uintmax_t strtoumax(const char *nptr, char **endptr, int base, Error &err)
+uintmax_t strtoumax(const char *__restrict__ nptr, char **__restrict__ endptr,
+                    int base, Error &err)
 {
     if ((base <= 2 || base >= 36) && base != 0) {
         err.set_code(Error::EINVAL);
@@ -116,7 +117,8 @@ end:
     return value;
 }
 
-intmax_t strtoimax(const char *nptr, char **endptr, int base, Error &err)
+intmax_t strtoimax(const char *__restrict__ nptr, char **__restrict__ endptr,
+                   int base, Error &err)
 {
     if ((base <= 2 || base >= 36) && base != 0) {
         err.set_code(Error::EINVAL);
@@ -208,7 +210,8 @@ end:
     return value;
 }
 
-unsigned long long strtoull(const char *nptr, char **endptr, int base, Error &err)
+unsigned long long strtoull(const char *__restrict__ nptr,
+                            char **__restrict__ endptr, int base, Error &err)
 {
     uintmax_t val = strtoumax(nptr, endptr, base, err);
 
@@ -220,7 +223,8 @@ unsigned long long strtoull(const char *nptr, char **endptr, int base, Error &er
     return val;
 }
 
-long long strtoll(const char *nptr, char **endptr, int base, Error &err)
+long long strtoll(const char *__restrict__ nptr, char **__restrict__ endptr,
+                  int base, Error &err)
 {
     intmax_t val = strtoimax(nptr, endptr, base, err);
 
@@ -236,7 +240,8 @@ long long strtoll(const char *nptr, char **endptr, int base, Error &err)
     return val;
 }
 
-long strtol(const char *nptr, char **endptr, int base, Error &err)
+long strtol(const char *__restrict__ nptr, char **__restrict__ endptr, int base,
+            Error &err)
 {
     intmax_t val = strtoimax(nptr, endptr, base, err);
 
@@ -252,7 +257,8 @@ long strtol(const char *nptr, char **endptr, int base, Error &err)
     return val;
 }
 
-unsigned long strtoul(const char *nptr, char **endptr, int base, Error &err)
+unsigned long strtoul(const char *__restrict__ nptr, char **__restrict__ endptr,
+                      int base, Error &err)
 {
     uintmax_t val = strtoumax(nptr, endptr, base, err);
 

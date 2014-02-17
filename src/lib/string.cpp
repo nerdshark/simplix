@@ -17,7 +17,7 @@
 
 #include <lib/string.h>
 
-char *strcpy(char *dest, const char *src)
+char *strcpy(char *__restrict__ dest, const char *__restrict__ src)
 {
     char *tmp = dest;
     while ((*tmp++ = *src++) != '\0')
@@ -26,7 +26,7 @@ char *strcpy(char *dest, const char *src)
     return dest;
 }
 
-char *strncpy(char *dest, const char *src, size_t n)
+char *strncpy(char *__restrict__ dest, const char *__restrict__ src, size_t n)
 {
     size_t i = 0;
     for (; i < n && src[i] != '\0'; ++i)
@@ -48,7 +48,7 @@ size_t strlen(const char *s)
     return len;
 }
 
-char *strcat(char *dest, const char *src)
+char *strcat(char *__restrict__ dest, const char *__restrict__ src)
 {
     char *tmp = dest;
 
@@ -61,7 +61,7 @@ char *strcat(char *dest, const char *src)
     return dest;
 }
 
-char *strncat(char *dest, const char *src, size_t n)
+char *strncat(char *__restrict__ dest, const char *__restrict__ src, size_t n)
 {
     char *tmp = dest;
 
@@ -238,7 +238,7 @@ void *memset(void *s, int c, size_t n)
     return s;
 }
 
-void *memcpy(void *dest, const void *src, size_t n)
+void *memcpy(void *__restrict__ dest, const void *__restrict__ src, size_t n)
 {
     unsigned char *t1 = (unsigned char *)dest;
     const unsigned char *t2 = (const unsigned char *)src;
