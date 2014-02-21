@@ -21,8 +21,24 @@
 #include <climits>
 #include <cstdint>
 #include <lib/error.h>
+#include <type_traits>
 
 int pow(int x, unsigned int y, Error &err);
+
+template<class T>
+T abs(const T &x)
+{
+    return x < 0 ? -x : x;
+}
+
+template<class T>
+using make_unsigned_t = typename std::make_unsigned<T>::type;
+
+template <class T>
+make_unsigned_t<T> unsigned_abs(const T &x)
+{
+    return x < 0 ? -x : x;
+}
 
 template<class T, class U>
 bool multiply_would_overflow(T val1, U val2, uintmax_t max)
