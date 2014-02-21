@@ -15,16 +15,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef UEFI_BOOT_EVENT_H
-#define UEFI_BOOT_EVENT_H
+#pragma once
 
 #include <uefi/types.h>
 
-enum EFI_TIMER_DELAY {
+typedef enum {
     TimerCancel,
     TimerPeriodic,
     TimerRelative
-};
+} EFI_TIMER_DELAY;
 
 typedef VOID (EFIAPI *EFI_EVENT_NOTIFY)
 (EFI_EVENT Event, VOID *Context);
@@ -81,5 +80,3 @@ typedef EFI_TPL (EFIAPI *EFI_RAISE_TPL)
 
 typedef VOID (EFIAPI *EFI_RESTORE_TPL)
 (EFI_TPL OldTpl);
-
-#endif // UEFI_BOOT_EVENT_H

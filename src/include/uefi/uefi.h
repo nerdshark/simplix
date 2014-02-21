@@ -15,57 +15,50 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef UEFI_H
-#define UEFI_H
+#pragma once
 
 #include <uefi/systab.h>
 #include <uefi/status_codes.h>
 
-namespace UEFI {
-
-inline EFI_STATUS print(EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *out, CONST CHAR16 *s)
+inline EFI_STATUS uefi_print(EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *out, CHAR16 *s)
 {
-    return out->OutputString(out, (CHAR16 *)s);
+    return out->OutputString(out, s);
 }
 
-const CHAR16 *status_to_string[] = {
-    [EFI_SUCCESS] = u"Success",
-    [EFI_LOAD_ERROR] = u"Load error",
-    [EFI_INVALID_PARAMETER] = u"Invalid parameter",
-    [EFI_UNSUPPORTED] = u"Unsupported",
-    [EFI_BAD_BUFFER_SIZE] = u"Bad buffer size",
-    [EFI_BUFFER_TOO_SMALL] = u"Buffer too small",
-    [EFI_NOT_READY] = u"Not ready",
-    [EFI_DEVICE_ERROR] = u"Device error",
-    [EFI_WRITE_PROTECTED] = u"Write protected",
-    [EFI_OUT_OF_RESOURCES] = u"Out of resources",
-    [EFI_VOLUME_CORRUPTED] = u"Volume corrupted",
-    [EFI_VOLUME_FULL] = u"Volume full",
-    [EFI_NO_MEDIA] = u"No media",
-    [EFI_MEDIA_CHANGED] = u"Media changed",
-    [EFI_NOT_FOUND] = u"Not found",
-    [EFI_ACCESS_DENIED] = u"Access denied",
-    [EFI_NO_RESPONSE] = u"No response",
-    [EFI_NO_MAPPING] = u"No mapping",
-    [EFI_TIMEOUT] = u"Timeout",
-    [EFI_NOT_STARTED] = u"Not started",
-    [EFI_ALREADY_STARTED] = u"Already started",
-    [EFI_ABORTED] = u"Aborted",
-    [EFI_ICMP_ERROR] = u"ICMP error",
-    [EFI_TFTP_ERROR] = u"TFTP error",
-    [EFI_PROTOCOL_ERROR] = u"Protocol error",
-    [EFI_INCOMPATIBLE_VERSION] = u"Incompatible version",
-    [EFI_SECURITY_VIOLATION] = u"Security violation",
-    [EFI_CRC_ERROR] = u"CRC error",
-    [EFI_END_OF_MEDIA] = u"End of media",
-    [29] = u"",
-    [30] = u"",
-    [EFI_END_OF_FILE] = u"End of file",
-    [EFI_INVALID_LANGUAGE] = u"Invalid language",
-    [EFI_COMPROMISED_DATA] = u"Compromised data",
-    [EFI_IP_ADDRESS_CONFLICT] = u"IP address conflict"
+CHAR16 *uefi_status_to_string[] = {
+    [EFI_SUCCESS] = L"Success",
+    [EFI_LOAD_ERROR] = L"Load error",
+    [EFI_INVALID_PARAMETER] = L"Invalid parameter",
+    [EFI_UNSUPPORTED] = L"Unsupported",
+    [EFI_BAD_BUFFER_SIZE] = L"Bad buffer size",
+    [EFI_BUFFER_TOO_SMALL] = L"Buffer too small",
+    [EFI_NOT_READY] = L"Not ready",
+    [EFI_DEVICE_ERROR] = L"Device error",
+    [EFI_WRITE_PROTECTED] = L"Write protected",
+    [EFI_OUT_OF_RESOURCES] = L"Out of resources",
+    [EFI_VOLUME_CORRUPTED] = L"Volume corrupted",
+    [EFI_VOLUME_FULL] = L"Volume full",
+    [EFI_NO_MEDIA] = L"No media",
+    [EFI_MEDIA_CHANGED] = L"Media changed",
+    [EFI_NOT_FOUND] = L"Not found",
+    [EFI_ACCESS_DENIED] = L"Access denied",
+    [EFI_NO_RESPONSE] = L"No response",
+    [EFI_NO_MAPPING] = L"No mapping",
+    [EFI_TIMEOUT] = L"Timeout",
+    [EFI_NOT_STARTED] = L"Not started",
+    [EFI_ALREADY_STARTED] = L"Already started",
+    [EFI_ABORTED] = L"Aborted",
+    [EFI_ICMP_ERROR] = L"ICMP error",
+    [EFI_TFTP_ERROR] = L"TFTP error",
+    [EFI_PROTOCOL_ERROR] = L"Protocol error",
+    [EFI_INCOMPATIBLE_VERSION] = L"Incompatible version",
+    [EFI_SECURITY_VIOLATION] = L"Security violation",
+    [EFI_CRC_ERROR] = L"CRC error",
+    [EFI_END_OF_MEDIA] = L"End of media",
+    [29] = L"",
+    [30] = L"",
+    [EFI_END_OF_FILE] = L"End of file",
+    [EFI_INVALID_LANGUAGE] = L"Invalid language",
+    [EFI_COMPROMISED_DATA] = L"Compromised data",
+    [EFI_IP_ADDRESS_CONFLICT] = L"IP address conflict"
 };
-
-} // namespace UEFI end
-
-#endif // UEFI_H

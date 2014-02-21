@@ -15,8 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef UEFI_RUN_VARIABLE_H
-#define UEFI_RUN_VARIABLE_H
+#pragma once
 
 #include <uefi/types.h>
 
@@ -28,15 +27,15 @@
 #define EFI_VARIABLE_TIME_BASED_AUTHENTICATED_WRITE_ACCESS 0x00000020
 #define EFI_VARIABLE_APPEND_WRITE 0x00000040
 
-struct EFI_VARIABLE_AUTHENTICATION {
+typedef struct {
     UINT64 MonotonicCount;
     WIN_CERTIFICATE_UEFI_GUID AuthInfo;
-};
+} EFI_VARIABLE_AUTHENTICATION;
 
-struct EFI_VARIABLE_AUTHENTICATION_2 {
+typedef struct {
     EFI_TIME TimeStamp;
     WIN_CERTIFICATE_UEFI_GUID AuthInfo;
-};
+} EFI_VARIABLE_AUTHENTICATION_2;
 
 typedef EFI_STATUS (EFIAPI *EFI_GET_VARIABLE)
 (CHAR16 *VariableName, EFI_GUID *VendorGuid, UINT32 *Attributes,
@@ -52,5 +51,3 @@ typedef EFI_STATUS (EFIAPI *EFI_SET_VARIABLE)
 typedef EFI_STATUS (EFIAPI *EFI_QUERY_VARIABLE_INFO)
 (UINT32 Attributes, UINT64 *MaximumVariableStorageSize,
  UINT64 *RemainingVariableStorageSize, UINT64 *MaximumVariableSize);
-
-#endif // UEFI_RUN_VARIABLE_H

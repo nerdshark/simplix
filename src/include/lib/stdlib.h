@@ -15,19 +15,21 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef STDLIB_H
-#define STDLIB_H
+#pragma once
 
-#include <climits>
-#include <cstdint>
-#include <lib/error.h>
+#include <limits.h>
+#include <stdint.h>
 
-long strtol(const char *nptr, char **endptr, int base, Error &err);
-long long strtoll(const char *nptr, char **endptr, int base, Error &err);
-intmax_t strtoimax(const char *nptr, char **endptr, int base, Error &err);
+long strtol(const char *restrict nptr, char **restrict endptr, int base,
+            int *err);
+long long strtoll(const char *restrict nptr, char **restrict endptr, int base,
+                  int *err);
+intmax_t strtoimax(const char *restrict nptr, char **restrict endptr, int base,
+                   int *err);
 
-unsigned long strtoul(const char *nptr, char **endptr, int base, Error &err);
-unsigned long long strtoull(const char *nptr, char **endptr, int base, Error &err);
-uintmax_t strtoumax(const char *nptr, char **endptr, int base, Error &err);
-
-#endif // STDLIB_H
+unsigned long strtoul(const char *restrict nptr, char **restrict endptr,
+                      int base, int *err);
+unsigned long long strtoull(const char *restrict nptr, char **restrict endptr,
+                            int base, int *err);
+uintmax_t strtoumax(const char *restrict nptr, char **restrict endptr,
+                    int base, int *err);

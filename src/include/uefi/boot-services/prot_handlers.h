@@ -15,27 +15,26 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef UEFI_BOOT_PROT_HANDLERS_H
-#define UEFI_BOOT_PROT_HANDLERS_H
+#pragma once
 
 #include <uefi/types.h>
 
-enum EFI_INTERFACE_TYPE {
+typedef enum {
     EFI_NATIVE_INTERFACE
-};
+} EFI_INTERFACE_TYPE;
 
-enum EFI_LOCATE_SEARCH_TYPE {
+typedef enum {
     AllHandles,
     ByRegisterNotify,
     ByProtocol
-};
+} EFI_LOCATE_SEARCH_TYPE;
 
-struct EFI_OPEN_PROTOCOL_INFORMATION_ENTRY {
+typedef struct {
     EFI_HANDLE AgentHandle;
     EFI_HANDLE ControllerHandle;
     UINT32 Attribute;
     UINT32 OpenCount;
-};
+} EFI_OPEN_PROTOCOL_INFORMATION_ENTRY;
 
 typedef EFI_STATUS (EFIAPI *EFI_INSTALL_PROTOCOL_INTERFACE)
 (EFI_HANDLE *Handle, EFI_GUID *Protocol, EFI_INTERFACE_TYPE InterfaceType,
@@ -102,5 +101,3 @@ typedef EFI_STATUS (EFIAPI *EFI_INSTALL_MULTIPLE_PROTOCOL_INTERFACES)
 
 typedef EFI_STATUS (EFIAPI *EFI_UNINSTALL_MULTIPLE_PROTOCOL_INTERFACES)
 (EFI_HANDLE Handle, ...);
-
-#endif // PROT_HANDLERS_H

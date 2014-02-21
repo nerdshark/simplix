@@ -15,12 +15,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef UEFI_RUN_RUNTIMESERVICES_H
-#define UEFI_RUN_RUNTIMESERVICES_H
+#pragma once
 
 #include <uefi/runtime-services/misc.h>
 #include <uefi/runtime-services/time.h>
 #include <uefi/runtime-services/variable.h>
 #include <uefi/runtime-services/virt_mem.h>
-
-#endif // UEFI_RUN_RUNTIMESERVICES_H

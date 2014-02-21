@@ -15,13 +15,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef UEFI_BOOT_BOOTSERVICES_H
-#define UEFI_BOOT_BOOTSERVICES_H
+#pragma once
 
 #include <uefi/boot-services/event.h>
 #include <uefi/boot-services/image_services.h>
 #include <uefi/boot-services/mem_alloc.h>
 #include <uefi/boot-services/misc.h>
 #include <uefi/boot-services/prot_handlers.h>
-
-#endif // UEFI_BOOT_BOOTSERVICES_H

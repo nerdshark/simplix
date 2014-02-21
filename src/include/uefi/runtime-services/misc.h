@@ -15,35 +15,34 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef UEFI_RUN_MISC_H
-#define UEFI_RUN_MISC_H
+#pragma once
 
 #include <uefi/types.h>
 
 #define EFI_CAPSULE_REPORT_GUID \
 { 0x39b68c46, 0xf7fb, 0x441b, 0xb6, 0xec, 0x16, 0xb0, 0xf6, 0x98, 0x21, 0xf3 }
 
-enum EFI_RESET_TYPE {
+typedef enum {
     EfiResetCold,
     EfiResetWarm,
     EfiResetShutdown,
     EfiResetPlatformSpecific
-};
+} EFI_RESET_TYPE;
 
-struct EFI_CAPSULE_BLOCK_DESCRIPTOR {
+typedef struct {
     UINT64 Length;
-    union Union {
+    union {
         EFI_PHYSICAL_ADDRESS DataBlock;
         EFI_PHYSICAL_ADDRESS ContinuationPointer;
-    };
-};
+    } Union;
+} EFI_CAPSULE_BLOCK_DESCRIPTOR;
 
-struct EFI_CAPSULE_HEADER {
+typedef struct {
     EFI_GUID CapsuleGuid;
     UINT32 HeaderSize;
     UINT32 Flags;
     UINT32 CapsuleImageSize;
-};
+} EFI_CAPSULE_HEADER;
 
 #define CAPSULE_FLAGS_PERSIST_ACROSS_RESET 0x00010000
 #define CAPSULE_FLAGS_POPULATE_SYSTEM_TABLE 0x00020000
@@ -55,21 +54,21 @@ struct EFI_CAPSULE_HEADER {
 #define EFI_OS_INDICATIONS_FMP_CAPSULE_SUPPORTED 0x0000000000000008
 #define EFI_OS_INDICATIONS_CAPSULE_RESULT_VAR_SUPPORTED 0x0000000000000010
 
-struct EFI_CAPSULE_RESULT_VARIABLE_HEADER {
+typedef struct {
     UINT32 VariableTotalSize;
     UINT32 Reserved;
     EFI_GUID CapsuleGuid;
     EFI_TIME CapsuleProcessed;
     EFI_STATUS CaspuleStatus;
-};
+} EFI_CAPSULE_RESULT_VARIABLE_HEADER;
 
-struct EFI_CAPSULE_RESULT_VARIABLE_FMP {
+typedef struct {
     UINT16 Version;
     UINT8 PayloadIndex;
     UINT8 UpdateImageIndex;
 
     EFI_GUID UpdateImageTypeId;
-};
+} EFI_CAPSULE_RESULT_VARIABLE_FMP;
 
 typedef VOID (EFIAPI *EFI_RESET_SYSTEM)
 (EFI_RESET_TYPE ResetType, EFI_STATUS ResetStatus, UINTN DataSize,
@@ -85,5 +84,3 @@ typedef EFI_STATUS (EFIAPI *EFI_UPDATE_CAPSULE)
 typedef EFI_STATUS (EFIAPI *EFI_QUERY_CAPSULE_CAPABILITIES)
 (EFI_CAPSULE_HEADER **CapsuleHeaderArray, UINTN CapsuleCount,
  UINT64 *MaximumCapsuleSize, EFI_RESET_TYPE *ResetType);
-
-#endif // UEFI_RUN_MISC_H

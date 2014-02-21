@@ -15,18 +15,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef UEFI_BOOT_MEM_ALLOC_H
-#define UEFI_BOOT_MEM_ALLOC_H
+#pragma once
 
 #include <uefi/types.h>
 
-enum EFI_ALLOCATE_TYPE {
+typedef enum {
     AllocateAnyPages,
     AllocateMaxAddress,
     MaxAllocateType
-};
+} EFI_ALLOCATE_TYPE;
 
-enum EFI_MEMORY_TYPE {
+typedef enum {
     EfiReservedMemoryType,
     EfiLoaderCode,
     EfiLoaderData,
@@ -42,15 +41,15 @@ enum EFI_MEMORY_TYPE {
     EfiMemoryMappedIOPortSpace,
     EfiPalCode,
     EfiMaxMemoryType
-};
+} EFI_MEMORY_TYPE;
 
-struct EFI_MEMORY_DESCRIPTOR {
+typedef struct {
     UINT32 Type;
     EFI_PHYSICAL_ADDRESS PhysicalStart;
     EFI_VIRTUAL_ADDRESS VirtualStart;
     UINT64 NumberOfPages;
     UINT64 Attribute;
-};
+} EFI_MEMORY_DESCRIPTOR;
 
 #define EFI_MEMORY_UC 0x0000000000000001
 #define EFI_MEMORY_WC 0x0000000000000002
@@ -80,5 +79,3 @@ typedef EFI_STATUS (EFIAPI *EFI_ALLOCATE_POOL)
 
 typedef EFI_STATUS (EFIAPI *EFI_FREE_POOL)
 (VOID *Buffer);
-
-#endif // UEFI_BOOT_MEM_ALLOC_H

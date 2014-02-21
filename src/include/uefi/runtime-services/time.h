@@ -15,8 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef UEFI_RUN_TIME_H
-#define UEFI_RUN_TIME_H
+#pragma once
 
 #include <uefi/types.h>
 
@@ -25,11 +24,11 @@
 
 #define EFI_UNSPECIFIED_TIMEZONE 0x07FF
 
-struct EFI_TIME_CAPABILITIES {
+typedef struct {
     UINT32 Resolution;
     UINT32 Accuracy;
     BOOLEAN SetsToZero;
-};
+} EFI_TIME_CAPABILITIES;
 
 typedef EFI_STATUS (EFIAPI *EFI_GET_TIME)
 (EFI_TIME *Time, EFI_TIME_CAPABILITIES *Capabilities);
@@ -42,5 +41,3 @@ typedef EFI_STATUS (EFIAPI *EFI_GET_WAKEUP_TIME)
 
 typedef EFI_STATUS (EFIAPI *EFI_SET_WAKEUP_TIME)
 (BOOLEAN Enable, EFI_TIME *Time);
-
-#endif // UEFI_RUN_TIME_H

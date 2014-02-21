@@ -15,8 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef UEFI_RUN_VIRT_MEM_H
-#define UEFI_RUN_VIRT_MEM_H
+#pragma once
 
 #include <uefi/types.h>
 
@@ -28,5 +27,3 @@ typedef EFI_STATUS (EFIAPI *EFI_SET_VIRTUAL_ADDRESS_MAP)
 
 typedef EFI_STATUS (EFIAPI *EFI_CONVERT_POINTER)
 (UINTN DebugDisposition, VOID **Address);
-
-#endif // UEFI_RUN_VIRT_MEM_H

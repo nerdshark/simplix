@@ -15,24 +15,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ERROR_H
-#define ERROR_H
+#pragma once
 
-class Error {
-public:
-    enum Code {
-        SUCCESS,
-        EINVAL,
-        ERANGE
-    };
-
-    Error(Code code) : m_code(code) { }
-
-    Code code() { return m_code; }
-    void set_code(Code code) { m_code = code; }
-    const char *to_string();
-private:
-    Code m_code;
+enum {
+    SUCCESS,
+    EINVAL,
+    ERANGE
 };
 
-#endif // ERROR_H
+const char *strerror(int error);

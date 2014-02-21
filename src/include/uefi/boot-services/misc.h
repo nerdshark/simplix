@@ -15,8 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef UEFI_BOOT_MISC_H
-#define UEFI_BOOT_MISC_H
+#pragma once
 
 #include <uefi/types.h>
 
@@ -40,5 +39,3 @@ typedef EFI_STATUS (EFIAPI *EFI_INSTALL_CONFIGURATION_TABLE)
 
 typedef EFI_STATUS (EFIAPI *EFI_CALCULATE_CRC32)
 (VOID *Data, UINTN DataSize, UINT32 *Crc32);
-
-#endif // UEFI_BOOT_MISC_H

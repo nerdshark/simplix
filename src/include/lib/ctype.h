@@ -15,8 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CTYPE_H
-#define CTYPE_H
+#pragma once
 
 int isalnum(int c);
 int isalpha(int c);
@@ -33,5 +32,3 @@ int isxdigit(int c);
 
 int toupper(char c);
 int tolower(char c);
-
-#endif // CTYPE_H

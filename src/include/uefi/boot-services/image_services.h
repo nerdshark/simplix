@@ -15,8 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef UEFI_BOOT_IMAGE_SERVICES_H
-#define UEFI_BOOT_IMAGE_SERVICES_H
+#pragma once
 
 #include <uefi/types.h>
 
@@ -25,7 +24,7 @@
 
 //typedef EFI_HII_PACKAGE_LIST_HEADER *EFI_HII_PACKAGE_LIST_PROTOCOL;
 
-struct EFI_SYSTEM_TABLE;
+struct _EFI_SYSTEM_TABLE;
 
 typedef EFI_STATUS (EFIAPI *EFI_IMAGE_LOAD)
 (BOOLEAN BootPolicy, EFI_HANDLE ParentImageHandle,
@@ -39,7 +38,7 @@ typedef EFI_STATUS (EFIAPI *EFI_IMAGE_UNLOAD)
 (EFI_HANDLE ImageHandle);
 
 typedef EFI_STATUS (EFIAPI *EFI_IMAGE_ENTRY_POINT)
-(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable);
+(EFI_HANDLE ImageHandle, struct _EFI_SYSTEM_TABLE *SystemTable);
 
 typedef EFI_STATUS (EFIAPI *EFI_EXIT)
 (EFI_HANDLE ImageHandle, EFI_STATUS ExitStatus, UINTN ExitDataSize,
@@ -47,5 +46,3 @@ typedef EFI_STATUS (EFIAPI *EFI_EXIT)
 
 typedef EFI_STATUS (EFIAPI *EFI_EXIT_BOOT_SERVICES)
 (EFI_HANDLE ImageHandle, UINTN MapKey);
-
-#endif // UEFI_BOOT_IMAGE_SERVICES_H

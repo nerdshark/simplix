@@ -16,20 +16,21 @@
  */
 
 #include <lib/math.h>
+#include <lib/error.h>
 
-int pow(int x, unsigned int y, Error &err)
+int pow(int x, unsigned int y, int *err)
 {
     if (y == 0)
         return 1;
 
     int a = x;
     for (unsigned int i = 1; i < y; ++i) {
-        if (multiply_would_overflow(a, x, INT_MAX)) {
-            err.set_code(Error::ERANGE);
+        if (MULTIPLY_WOULD_OVERFLOW(a, x, INT_MAX)) {
+            *err = ERANGE;
             return INT_MAX;
         }
-        if (multiply_would_underflow(a, x, INT_MIN)) {
-            err.set_code(Error::ERANGE);
+        if (MULTIPLY_WOULD_UNDERFLOW(a, x, INT_MIN)) {
+            *err = ERANGE;
             return INT_MIN;
         }
 
@@ -37,4 +38,25 @@ int pow(int x, unsigned int y, Error &err)
     }
 
     return a;
+}
+
+int abs(int i)
+{
+    if (i < 0)
+        return -i;
+    return i;
+}
+
+long labs(long i)
+{
+    if (i < 0)
+        return -i;
+    return i;
+}
+
+long long llabs(long long i)
+{
+    if (i < 0)
+        return -i;
+    return i;
 }

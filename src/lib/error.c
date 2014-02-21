@@ -15,15 +15,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <uefi/uefi.h>
+#include <lib/error.h>
 
-extern "C"
-EFI_STATUS EFIAPI kmain(EFI_HANDLE handle, EFI_SYSTEM_TABLE *systab)
+const char *error_code_to_string[] = {
+    [SUCCESS] = "Success",
+    [EINVAL] = "Invalid",
+    [ERANGE] = "Range error"
+};
+
+const char *strerror(int error)
 {
-    (void)handle;
-
-    UEFI::print(systab->ConOut, u"Welcome to Simplix!\r\n");
-
-    asm volatile ("cli \n\t hlt");
-    return EFI_SUCCESS;
+    return error_code_to_string[error];
 }

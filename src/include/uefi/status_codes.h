@@ -15,8 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef UEFI_STATUS_CODES_H
-#define UEFI_STATUS_CODES_H
+#pragma once
 
 enum {
     EFI_SUCCESS = 0
@@ -64,5 +63,3 @@ enum {
     EFI_WARN_BUFFER_TOO_SMALL = 4,
     EFI_WARN_STALE_DATA = 5
 };
-
-#endif // UEFI_STATUS_CODES_H
