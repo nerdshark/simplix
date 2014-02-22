@@ -403,7 +403,7 @@ int vsnprintf(char *str, size_t size, const char *format, va_list ap)
         case 'X': {
             ++format;
             unsigned val = va_arg(ap, unsigned);
-            int ret = signed_num_to_str(str+cnt, size-cnt, val, 16, UPPERCASE);
+            int ret = unsigned_num_to_str(str+cnt, size-cnt, val, 16, UPPERCASE);
             if (ret == -1 || ADD_WOULD_OVERFLOW(cnt, ret, INT_MAX))
                 return -1;
             cnt += ret; }
