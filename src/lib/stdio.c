@@ -422,10 +422,7 @@ int vsnprintf(char *str, size_t size, const char *format, va_list ap)
                 if ((size_t)cnt < size)
                     str[cnt] = *val;
                 ++cnt;
-            }
-            if ((size_t)cnt < size)
-                str[cnt] = '\0';
-            ++cnt; }
+            } }
             break;
         case 'p': {
             ++format;
