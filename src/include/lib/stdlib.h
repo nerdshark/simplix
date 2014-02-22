@@ -22,15 +22,15 @@
 #include <lib/error.h>
 
 long strtol(const char *__restrict__ nptr, char **__restrict__ endptr,
-            int base, Errno *err);
+            int base, Errno &err);
 long long strtoll(const char *__restrict__ nptr, char **__restrict__ endptr,
-                  int base, Errno *err);
+                  int base, Errno &err);
 intmax_t strtoimax(const char *__restrict__ nptr, char **__restrict__ endptr,
-                   int base, Errno *err);
+                   int base, Errno &err);
 
 unsigned long strtoul(const char *__restrict__ nptr,
-                      char **__restrict__ endptr, int base, Errno *err);
+                      char **__restrict__ endptr, int base, Errno &err);
 unsigned long long strtoull(const char *__restrict__ nptr,
-                            char **__restrict__ endptr, int base, Errno *err);
+                            char **__restrict__ endptr, int base, Errno &err);
 uintmax_t strtoumax(const char *__restrict__ nptr, char **__restrict__ endptr,
-                    int base, Errno *err);
+                    int base, Errno &err);

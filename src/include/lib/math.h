@@ -21,7 +21,7 @@
 #include <cstdint>
 #include <lib/error.h>
 
-int pow(int x, unsigned int y, Errno *err);
+int pow(int x, unsigned int y, Errno &err);
 
 int abs(int i);
 long labs(long i);

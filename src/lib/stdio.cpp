@@ -18,17 +18,17 @@
 #include <lib/stdio.h>
 #include <lib/math.h>
 
-enum Case_sensitivity {
+enum CaseSensitivity {
     UPPERCASE,
     LOWERCASE
 };
 
-static int digit_to_char(int x, Case_sensitivity case_sensitivity);
+static int digit_to_char(int x, CaseSensitivity case_sensitivity);
 static void *mem_reverse_inplace(void *s, size_t size);
 static int signed_num_to_str(char *str, size_t size, intmax_t x, int base,
-                             Case_sensitivity case_sensitivity);
+                             CaseSensitivity case_sensitivity);
 static int unsigned_num_to_str(char *str, size_t size, uintmax_t x, int base,
-                               Case_sensitivity case_sensitivity);
+                               CaseSensitivity case_sensitivity);
 
 int sprintf(char *str, const char *format, ...)
 {
@@ -450,7 +450,7 @@ int vsnprintf(char *str, size_t size, const char *format, va_list ap)
 }
 
 int signed_num_to_str(char *str, size_t size, intmax_t x, int base,
-                      Case_sensitivity case_sensitivity)
+                      CaseSensitivity case_sensitivity)
 {
     int cnt = 0;
 
@@ -470,7 +470,7 @@ int signed_num_to_str(char *str, size_t size, intmax_t x, int base,
 }
 
 int unsigned_num_to_str(char *str, size_t size, uintmax_t x, int base,
-                        Case_sensitivity case_sensitivity)
+                        CaseSensitivity case_sensitivity)
 {
     int cnt = 0;
 
@@ -490,7 +490,7 @@ int unsigned_num_to_str(char *str, size_t size, uintmax_t x, int base,
     return cnt;
 }
 
-int digit_to_char(int x, Case_sensitivity case_sensitivity)
+int digit_to_char(int x, CaseSensitivity case_sensitivity)
 {
     if (x >= 0 && x <= 9)
         return x + '0';
