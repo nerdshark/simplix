@@ -1,11 +1,11 @@
 VPATH = src:src/lib
 OBJECTS = kernel.o error.o string.o ctype.o math.o stdlib.o stdio.o
 
-CC = x86_64-w64-mingw32-gcc
+CXX = x86_64-w64-mingw32-g++
 LD = x86_64-w64-mingw32-ld
 
-CFLAGS = -Wall -Wextra -Werror -std=c11 -ffreestanding -fshort-wchar -O2 \
-	-I src/include
+CXXFLAGS = -Wall -Wextra -Werror -std=c++11 -ffreestanding -fshort-wchar \
+	-fno-exceptions -fno-rtti -O2 -I src/include
 LDFLAGS = -nostdlib --oformat pei-x86-64 --subsystem 10 -pie -e kmain
 
 all: simplix.efi

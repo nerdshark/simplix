@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <limits.h>
+#include <climits>
 #include <lib/stdlib.h>
 #include <lib/ctype.h>
 #include <lib/math.h>
@@ -36,25 +36,25 @@ static int char_to_value(char c)
     return -1;
 }
 
-uintmax_t strtoumax(const char *restrict nptr, char **restrict endptr,
-                    int base, int *err)
+uintmax_t strtoumax(const char *__restrict__ nptr, char **__restrict__ endptr,
+                    int base, Errno *err)
 {
     if ((base <= 2 || base >= 36) && base != 0) {
-        *err = EINVAL;
+        *err = Errno::EINVAL;
         return 0;
     }
 
     while (isspace(*nptr))
         ++nptr;
 
-    int negative = 0;
+    bool negative = false;
 
     switch (*nptr) {
     case '+':
         ++nptr;
         break;
     case '-':
-        negative = 1;
+        negative = true;
         ++nptr;
         break;
     default:
@@ -86,22 +86,22 @@ uintmax_t strtoumax(const char *restrict nptr, char **restrict endptr,
         if (digit == -1 || digit >= base)
             goto end;
 
-        int err2 = SUCCESS;
+        Errno err2 = Errno::SUCCESS;
         unsigned int place_value = pow(base, position, &err2);
-        if (err2 != SUCCESS) {
-            *err = ERANGE;
+        if (err2 != Errno::SUCCESS) {
+            *err = Errno::ERANGE;
             return UINTMAX_MAX;
         }
 
-        if (MULTIPLY_WOULD_OVERFLOW((unsigned int)digit, place_value, UINTMAX_MAX)) {
-            *err = ERANGE;
+        if (multiply_would_overflow(digit, place_value, UINTMAX_MAX)) {
+            *err = Errno::ERANGE;
             return UINTMAX_MAX;
         }
 
         uintmax_t digit_value = digit * place_value;
 
-        if (ADD_WOULD_OVERFLOW(value, digit_value, UINTMAX_MAX)) {
-            *err = ERANGE;
+        if (add_would_overflow(value, digit_value, UINTMAX_MAX)) {
+            *err = Errno::ERANGE;
             return UINTMAX_MAX;
         }
 
@@ -112,31 +112,31 @@ end:
     if (negative)
         value = -value; // Apparently, letting it underflow here is OK
 
-    if (endptr != NULL)
+    if (endptr != nullptr)
         *endptr = (char *)nptr;
 
     return value;
 }
 
-intmax_t strtoimax(const char *restrict nptr, char **restrict endptr,
-                   int base, int *err)
+intmax_t strtoimax(const char *__restrict__ nptr, char **__restrict__ endptr,
+                   int base, Errno *err)
 {
     if ((base <= 2 || base >= 36) && base != 0) {
-        *err = EINVAL;
+        *err = Errno::EINVAL;
         return -1;
     }
 
     while (isspace(*nptr))
         ++nptr;
 
-    int negative = 0;
+    bool negative = false;
 
     switch (*nptr) {
     case '+':
         ++nptr;
         break;
     case '-':
-        negative = 1;
+        negative = true;
         ++nptr;
         break;
     default:
@@ -168,17 +168,17 @@ intmax_t strtoimax(const char *restrict nptr, char **restrict endptr,
         if (digit == -1 || digit >= base)
             goto end;
 
-        int err2 = SUCCESS;
+        Errno err2 = Errno::SUCCESS;
         unsigned int place_value = pow(base, position, &err2);
-        if (err2 != SUCCESS) {
-            *err = ERANGE;
+        if (err2 != Errno::SUCCESS) {
+            *err = Errno::ERANGE;
             if (negative)
                 return INTMAX_MIN;
             return INTMAX_MAX;
         }
 
-        if (MULTIPLY_WOULD_OVERFLOW(digit, place_value, INTMAX_MAX)) {
-            *err = ERANGE;
+        if (multiply_would_overflow(digit, place_value, INTMAX_MAX)) {
+            *err = Errno::ERANGE;
             if (negative)
                 return INTMAX_MIN;
             return INTMAX_MAX;
@@ -186,8 +186,8 @@ intmax_t strtoimax(const char *restrict nptr, char **restrict endptr,
 
         intmax_t digit_value = digit * place_value;
 
-        if (ADD_WOULD_OVERFLOW(value, digit_value, INTMAX_MAX)) {
-            *err = ERANGE;
+        if (add_would_overflow(value, digit_value, INTMAX_MAX)) {
+            *err = Errno::ERANGE;
             if (negative)
                 return INTMAX_MIN;
             return INTMAX_MAX;
@@ -198,73 +198,73 @@ intmax_t strtoimax(const char *restrict nptr, char **restrict endptr,
 
 end:
     if (negative) {
-        if (MULTIPLY_WOULD_UNDERFLOW(value, -1, INTMAX_MIN)) {
-            *err = ERANGE;
+        if (multiply_would_underflow(value, -1, INTMAX_MIN)) {
+            *err = Errno::ERANGE;
             return INTMAX_MIN;
         }
         value = -value;
     }
 
-    if (endptr != NULL)
+    if (endptr != nullptr)
         *endptr = (char *)nptr;
 
     return value;
 }
 
-unsigned long long strtoull(const char *restrict nptr, char **restrict endptr,
-                            int base, int *err)
+unsigned long long strtoull(const char *__restrict__ nptr,
+                            char **__restrict__ endptr, int base, Errno *err)
 {
     uintmax_t val = strtoumax(nptr, endptr, base, err);
 
     if (val > ULLONG_MAX) {
-        *err = ERANGE;
+        *err = Errno::ERANGE;
         return ULLONG_MAX;
     }
 
     return val;
 }
 
-long long strtoll(const char *restrict nptr, char **restrict endptr,
-                  int base, int *err)
+long long strtoll(const char *__restrict__ nptr, char **__restrict__ endptr,
+                  int base, Errno *err)
 {
     intmax_t val = strtoimax(nptr, endptr, base, err);
 
     if (val > LLONG_MAX) {
-        *err = ERANGE;
+        *err = Errno::ERANGE;
         return LLONG_MAX;
     }
     if (val < LLONG_MIN) {
-        *err = ERANGE;
+        *err = Errno::ERANGE;
         return LLONG_MIN;
     }
 
     return val;
 }
 
-long strtol(const char *restrict nptr, char **restrict endptr, int base,
-            int *err)
+long strtol(const char *__restrict__ nptr, char **__restrict__ endptr,
+            int base, Errno *err)
 {
     intmax_t val = strtoimax(nptr, endptr, base, err);
 
     if (val > LONG_MAX) {
-        *err = ERANGE;
+        *err = Errno::ERANGE;
         return LONG_MAX;
     }
     if (val < LONG_MIN) {
-        *err = ERANGE;
+        *err = Errno::ERANGE;
         return LONG_MIN;
     }
 
     return val;
 }
 
-unsigned long strtoul(const char *restrict nptr, char **restrict endptr,
-                      int base, int *err)
+unsigned long strtoul(const char *__restrict__ nptr,
+                      char **__restrict__ endptr, int base, Errno *err)
 {
     uintmax_t val = strtoumax(nptr, endptr, base, err);
 
     if (val > ULONG_MAX) {
-        *err = ERANGE;
+        *err = Errno::ERANGE;
         return ULONG_MAX;
     }
 

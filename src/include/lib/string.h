@@ -17,13 +17,13 @@
 
 #pragma once
 
-#include <stddef.h>
+#include <cstddef>
 
-char *strcpy(char *restrict dest, const char *restrict src);
-char *strncpy(char *restrict dest, const char *restrict src, size_t n);
+char *strcpy(char *__restrict__ dest, const char *__restrict__ src);
+char *strncpy(char *__restrict__ dest, const char *__restrict__ src, size_t n);
 
-char *strcat(char *restrict dest, const char *restrict src);
-char *strncat(char *restrict dest, const char *restrict src, size_t n);
+char *strcat(char *__restrict__ dest, const char *__restrict__ src);
+char *strncat(char *__restrict__ dest, const char *__restrict__ src, size_t n);
 
 size_t strlen(const char *s);
 
@@ -49,4 +49,4 @@ int memcmp(const void *s1, const void *s2, size_t n);
 
 void *memset(void *s, int c, size_t n);
 
-void *memcpy(void *restrict dest, const void *restrict src, size_t n);
+void *memcpy(void *__restrict__ dest, const void *__restrict__ src, size_t n);

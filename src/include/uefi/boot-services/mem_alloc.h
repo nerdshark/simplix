@@ -19,13 +19,13 @@
 
 #include <uefi/types.h>
 
-typedef enum {
+enum EFI_ALLOCATE_TYPE {
     AllocateAnyPages,
     AllocateMaxAddress,
     MaxAllocateType
-} EFI_ALLOCATE_TYPE;
+};
 
-typedef enum {
+enum EFI_MEMORY_TYPE {
     EfiReservedMemoryType,
     EfiLoaderCode,
     EfiLoaderData,
@@ -41,15 +41,15 @@ typedef enum {
     EfiMemoryMappedIOPortSpace,
     EfiPalCode,
     EfiMaxMemoryType
-} EFI_MEMORY_TYPE;
+};
 
-typedef struct {
+struct EFI_MEMORY_DESCRIPTOR {
     UINT32 Type;
     EFI_PHYSICAL_ADDRESS PhysicalStart;
     EFI_VIRTUAL_ADDRESS VirtualStart;
     UINT64 NumberOfPages;
     UINT64 Attribute;
-} EFI_MEMORY_DESCRIPTOR;
+};
 
 #define EFI_MEMORY_UC 0x0000000000000001
 #define EFI_MEMORY_WC 0x0000000000000002

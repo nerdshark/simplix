@@ -18,12 +18,12 @@
 #include <lib/error.h>
 
 const char *error_code_to_string[] = {
-    [SUCCESS] = "Success",
-    [EINVAL] = "Invalid",
-    [ERANGE] = "Range error"
+    [Errno::SUCCESS] = "Success",
+    [Errno::EINVAL] = "Invalid",
+    [Errno::ERANGE] = "Range error"
 };
 
-const char *strerror(int error)
+const char *Errno::to_string() const
 {
-    return error_code_to_string[error];
+    return error_code_to_string[code];
 }

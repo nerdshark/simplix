@@ -17,11 +17,14 @@
 
 #pragma once
 
-#include <stdarg.h>
+#include <cstdarg>
+#include <cstddef>
 
-int vsprintf(char *restrict str, const char *restrict format, va_list ap);
-int vsnprintf(char *restrict str, size_t size, const char *restrict format,
-              va_list ap);
+int vsprintf(char *__restrict__ str, const char *__restrict__ format,
+             va_list ap);
+int vsnprintf(char *__restrict__ str, size_t size,
+              const char *__restrict__ format, va_list ap);
 
-int sprintf(char *restrict str, const char *restrict format, ...);
-int snprintf(char *restrict str, size_t size, const char *restrict format, ...);
+int sprintf(char *__restrict__ str, const char *__restrict__ format, ...);
+int snprintf(char *__restrict__ str, size_t size,
+             const char *__restrict__ format, ...);

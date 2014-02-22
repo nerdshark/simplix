@@ -15,22 +15,48 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#include <lib/math.h>
+#include <lib/error.h>
 
-class Errno {
-public:
-    enum ErrorCode {
-        SUCCESS,
-        EINVAL,
-        ERANGE
-    };
+int pow(int x, unsigned int y, Errno *err)
+{
+    if (y == 0)
+        return 1;
 
-    Errno(ErrorCode code) : code(code) { }
+    int a = x;
+    for (unsigned int i = 1; i < y; ++i) {
+        if (multiply_would_overflow(a, x, INT_MAX)) {
+            *err = Errno::ERANGE;
+            return INT_MAX;
+        }
+        if (multiply_would_underflow(a, x, INT_MIN)) {
+            *err = Errno::ERANGE;
+            return INT_MIN;
+        }
 
-    bool operator==(ErrorCode x) { return x == code; }
-    bool operator!=(ErrorCode x) { return x != code; }
-    ErrorCode operator=(ErrorCode x) { return code = x; }
-    const char *to_string() const;
-private:
-    ErrorCode code;
-};
+        a *= x;
+    }
+
+    return a;
+}
+
+int abs(int i)
+{
+    if (i < 0)
+        return -i;
+    return i;
+}
+
+long labs(long i)
+{
+    if (i < 0)
+        return -i;
+    return i;
+}
+
+long long llabs(long long i)
+{
+    if (i < 0)
+        return -i;
+    return i;
+}

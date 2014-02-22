@@ -19,13 +19,16 @@
 
 #include <uefi/systab.h>
 #include <uefi/status_codes.h>
+#include <uefi/protocols/console/console.h>
 
-inline EFI_STATUS uefi_print(EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *out, CHAR16 *s)
+namespace UEFI {
+
+inline EFI_STATUS print(EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *out, CONST CHAR16 *s)
 {
-    return out->OutputString(out, s);
+    return out->OutputString(out, (CHAR16 *)s);
 }
 
-CHAR16 *uefi_status_to_string[] = {
+CONST CHAR16 *uefi_status_to_string[] = {
     [EFI_SUCCESS] = L"Success",
     [EFI_LOAD_ERROR] = L"Load error",
     [EFI_INVALID_PARAMETER] = L"Invalid parameter",
@@ -62,3 +65,5 @@ CHAR16 *uefi_status_to_string[] = {
     [EFI_COMPROMISED_DATA] = L"Compromised data",
     [EFI_IP_ADDRESS_CONFLICT] = L"IP address conflict"
 };
+
+}

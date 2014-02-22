@@ -35,18 +35,18 @@
 #define EFI_SYSTEM_TABLE_REVISION EFI_2_40_SYSTEM_TABLE_REVISION
 #define EFI_SPECIFICATION_VERSION EFI_SYSTEM_TABLE_REVISION
 
-typedef struct {
+struct EFI_TABLE_HEADER {
     UINT64 Signature;
     UINT32 Revision;
     UINT32 HeaderSize;
     UINT32 CRC32;
     UINT32 Reserved;
-} EFI_TABLE_HEADER;
+};
 
 #define EFI_BOOT_SERVICES_SIGNATURE 0x56524553544f4f42
 #define EFI_BOOT_SERVICES_REVISION EFI_SPECIFICATION_VERSION
 
-typedef struct {
+struct EFI_BOOT_SERVICES {
     EFI_TABLE_HEADER Hdr;
 
     EFI_RAISE_TPL RaiseTPL;
@@ -103,12 +103,12 @@ typedef struct {
     EFI_COPY_MEM CopyMem;
     EFI_SET_MEM SetMem;
     EFI_CREATE_EVENT_EX CreateEventEx;
-} EFI_BOOT_SERVICES;
+};
 
 #define EFI_RUNTIME_SERVICES_SIGNATURE 0x56524553544e5552
 #define EFI_RUNTIME_SERVICES_REVISION EFI_SPECIFICATION_VERSION
 
-typedef struct {
+struct EFI_RUNTIME_SERVICES {
     EFI_TABLE_HEADER Hdr;
 
     EFI_GET_TIME GetTime;
@@ -130,12 +130,12 @@ typedef struct {
     EFI_QUERY_CAPSULE_CAPABILITIES QueryCapsuleCapabilities;
 
     EFI_QUERY_VARIABLE_INFO QueryVariableInfo;
-} EFI_RUNTIME_SERVICES;
+};
 
-typedef struct {
+struct EFI_CONFIGURATION_TABLE {
     EFI_GUID VendorGuid;
     VOID *VendorTable;
-} EFI_CONFIGURATION_TABLE;
+};
 
 #define EFI_ACPI_20_TABLE_GUID \
 { 0x8868e871, 0xe4f1, 0x11d3, 0xbc, 0x22, 0x0, 0x80, 0xc7, 0x3c, 0x88, 0x81 }
@@ -155,7 +155,7 @@ typedef struct {
 #define ACPI_10_TABLE_GUID \
 { 0xeb9d2d30, 0x2d88, 0x11d3, 0x9a, 0x16, 0x0, 0x90, 0x27, 0x3f, 0xc1, 0x4d }
 
-typedef struct _EFI_SYSTEM_TABLE {
+struct EFI_SYSTEM_TABLE {
     EFI_TABLE_HEADER Hdr;
     CHAR16 *FirmwareVendor;
     UINT32 FirmwareRevision;
@@ -169,4 +169,4 @@ typedef struct _EFI_SYSTEM_TABLE {
     EFI_BOOT_SERVICES *BootServices;
     UINTN NumberOfTableEntries;
     EFI_CONFIGURATION_TABLE *ConfigurationTable;
-} EFI_SYSTEM_TABLE;
+};

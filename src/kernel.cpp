@@ -15,48 +15,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <lib/math.h>
-#include <lib/error.h>
+#include <uefi/uefi.h>
 
-int pow(int x, unsigned int y, int *err)
+extern "C"
+EFI_STATUS EFIAPI kmain(EFI_HANDLE handle, EFI_SYSTEM_TABLE *systab)
 {
-    if (y == 0)
-        return 1;
+    (void)handle;
 
-    int a = x;
-    for (unsigned int i = 1; i < y; ++i) {
-        if (MULTIPLY_WOULD_OVERFLOW(a, x, INT_MAX)) {
-            *err = ERANGE;
-            return INT_MAX;
-        }
-        if (MULTIPLY_WOULD_UNDERFLOW(a, x, INT_MIN)) {
-            *err = ERANGE;
-            return INT_MIN;
-        }
+    UEFI::print(systab->ConOut, L"Welcome to Simplix!\r\n");
 
-        a *= x;
-    }
-
-    return a;
-}
-
-int abs(int i)
-{
-    if (i < 0)
-        return -i;
-    return i;
-}
-
-long labs(long i)
-{
-    if (i < 0)
-        return -i;
-    return i;
-}
-
-long long llabs(long long i)
-{
-    if (i < 0)
-        return -i;
-    return i;
+    __asm__ volatile ("cli \n\t hlt");
+    return EFI_SUCCESS;
 }

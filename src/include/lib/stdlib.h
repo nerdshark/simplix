@@ -17,19 +17,20 @@
 
 #pragma once
 
-#include <limits.h>
-#include <stdint.h>
+#include <climits>
+#include <cstdint>
+#include <lib/error.h>
 
-long strtol(const char *restrict nptr, char **restrict endptr, int base,
-            int *err);
-long long strtoll(const char *restrict nptr, char **restrict endptr, int base,
-                  int *err);
-intmax_t strtoimax(const char *restrict nptr, char **restrict endptr, int base,
-                   int *err);
+long strtol(const char *__restrict__ nptr, char **__restrict__ endptr,
+            int base, Errno *err);
+long long strtoll(const char *__restrict__ nptr, char **__restrict__ endptr,
+                  int base, Errno *err);
+intmax_t strtoimax(const char *__restrict__ nptr, char **__restrict__ endptr,
+                   int base, Errno *err);
 
-unsigned long strtoul(const char *restrict nptr, char **restrict endptr,
-                      int base, int *err);
-unsigned long long strtoull(const char *restrict nptr, char **restrict endptr,
-                            int base, int *err);
-uintmax_t strtoumax(const char *restrict nptr, char **restrict endptr,
-                    int base, int *err);
+unsigned long strtoul(const char *__restrict__ nptr,
+                      char **__restrict__ endptr, int base, Errno *err);
+unsigned long long strtoull(const char *__restrict__ nptr,
+                            char **__restrict__ endptr, int base, Errno *err);
+uintmax_t strtoumax(const char *__restrict__ nptr, char **__restrict__ endptr,
+                    int base, Errno *err);

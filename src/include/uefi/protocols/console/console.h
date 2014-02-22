@@ -15,14 +15,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <uefi/uefi.h>
+#pragma once
 
-EFI_STATUS EFIAPI kmain(EFI_HANDLE handle, EFI_SYSTEM_TABLE *systab)
-{
-    (void)handle;
-
-    uefi_print(systab->ConOut, L"Welcome to Simplix!\r\n");
-
-    __asm__ volatile ("cli \n\t hlt");
-    return EFI_SUCCESS;
-}
+#include <uefi/protocols/console/gop.h>
+#include <uefi/protocols/console/text_input.h>
+#include <uefi/protocols/console/text_output.h>
