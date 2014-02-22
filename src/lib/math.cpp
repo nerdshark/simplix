@@ -42,28 +42,20 @@ int pow(int x, unsigned int y, Errno &err)
 
 int abs(int i)
 {
-    if (i < 0)
-        return -i;
-    return i;
+    return i < 0 ? -i : i;
 }
 
 long labs(long i)
 {
-    if (i < 0)
-        return -i;
-    return i;
+    return i < 0 ? -i : i;
 }
 
 long long llabs(long long i)
 {
-    if (i < 0)
-        return -i;
-    return i;
+    return i < 0 ? -i : i;
 }
 
 intmax_t imaxabs(intmax_t i)
 {
-    if (i < 0)
-        return -i;
-    return i;
+    return i < 0 ? -i : i;
 }

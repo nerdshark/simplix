@@ -32,9 +32,7 @@ intmax_t imaxabs(intmax_t i);
 template<class T>
 typename std::make_unsigned<T>::type unsigned_abs(T x)
 {
-    if (x < 0)
-        return -x;
-    return x;
+    return x < 0 ? -x : x;
 }
 
 template <class T, class U>
