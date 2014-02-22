@@ -44,11 +44,11 @@ bool multiply_would_underflow(T val1, U val2, intmax_t min)
 template <class T, class U>
 bool add_would_overflow(T val1, U val2, uintmax_t max)
 {
-    return val1 > 0 && val1 > max - val2;
+    return val1 > 0 && val2 > 0 && val1 > max - val2;
 }
 
 template <class T, class U>
 bool add_would_underflow(T val1, U val2, intmax_t min)
 {
-    return val1 > 0 && val1 < min / val2;
+    return val1 < 0 && val2 < 0 && val1 < min - val2;
 }
