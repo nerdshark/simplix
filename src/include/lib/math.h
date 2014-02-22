@@ -20,12 +20,22 @@
 #include <climits>
 #include <cstdint>
 #include <lib/error.h>
+#include <type_traits>
 
 int pow(int x, unsigned int y, Errno &err);
 
 int abs(int i);
 long labs(long i);
 long long llabs(long long i);
+intmax_t imaxabs(intmax_t i);
+
+template<class T>
+typename std::make_unsigned<T>::type unsigned_abs(T x)
+{
+    if (x < 0)
+        return -x;
+    return x;
+}
 
 template <class T, class U>
 bool multiply_would_overflow(T val1, U val2, uintmax_t max)

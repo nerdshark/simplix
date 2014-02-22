@@ -460,9 +460,9 @@ int signed_num_to_str(char *str, size_t size, intmax_t x, int base,
         ++cnt;
     }
 
-    x = abs(x);
+    uintmax_t abs_arg = unsigned_abs(x);
 
-    int ret = unsigned_num_to_str(str+cnt, size-cnt, x, base, case_sensitivity);
+    int ret = unsigned_num_to_str(str+cnt, size-cnt, abs_arg, base, case_sensitivity);
     if (ret == -1 || add_would_overflow(ret, cnt, INT_MAX))
         return -1;
 

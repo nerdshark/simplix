@@ -60,3 +60,10 @@ long long llabs(long long i)
         return -i;
     return i;
 }
+
+intmax_t imaxabs(intmax_t i)
+{
+    if (i < 0)
+        return -i;
+    return i;
+}
