@@ -16,13 +16,28 @@
  */
 
 #include <uefi/uefi.h>
+#include <lib/string.h>
 
 extern "C"
 EFI_STATUS EFIAPI kmain(EFI_HANDLE handle, EFI_SYSTEM_TABLE *systab)
 {
-    (void)handle;
+    EFI_STATUS status;
 
     UEFI::print(systab->ConOut, L"Welcome to Simplix!\r\n");
+
+    EFI_GRAPHICS_OUTPUT_PROTOCOL *gop = UEFI::get_gop(handle, systab);
+    void *framebuffer_base = (void *)gop->Mode->FrameBufferBase;
+    size_t framebuffer_size = gop->Mode->FrameBufferSize;
+
+    UEFI::MemoryMap memory_map;
+    UEFI::get_memory_map(systab, &memory_map);
+
+    status = systab->BootServices->ExitBootServices(handle, memory_map.map_key);
+    if (EFI_STATUS_IS_ERROR(status))
+        UEFI::die(systab, status, L"ExitBootServices");
+
+    // Test framebuffer; should set screen to all-white
+    memset(framebuffer_base, 0xff, framebuffer_size);
 
     __asm__ volatile ("cli \n\t hlt");
     return EFI_SUCCESS;

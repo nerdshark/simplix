@@ -1,5 +1,5 @@
-VPATH = src:src/lib
-OBJECTS = kernel.o error.o string.o ctype.o math.o stdlib.o stdio.o
+VPATH = src:src/lib:src/uefi
+OBJECTS = kernel.o error.o string.o ctype.o math.o stdlib.o stdio.o uefi.o
 
 CXX = x86_64-w64-mingw32-g++
 LD = x86_64-w64-mingw32-ld
