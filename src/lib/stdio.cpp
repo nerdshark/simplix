@@ -17,6 +17,7 @@
 
 #include <lib/stdio.h>
 #include <lib/math.h>
+#include <framebuffer/framebuffer.h>
 
 enum CaseSensitivity {
     UPPERCASE,
@@ -30,7 +31,26 @@ static int signed_num_to_str(char *str, size_t size, intmax_t x, int base,
 static int unsigned_num_to_str(char *str, size_t size, uintmax_t x, int base,
                                CaseSensitivity case_sensitivity);
 
-int sprintf(char *str, const char *format, ...)
+int vprintf(const char *__restrict__ format, va_list ap)
+{
+    char buf[3920];
+    int ret = vsnprintf(buf, sizeof(buf), format, ap);
+    if (ret == -1)
+        return -1;
+    ret = Framebuffer::put_string(buf);
+    return ret;
+}
+
+int printf(const char *__restrict__ format, ...)
+{
+    va_list ap;
+    va_start(ap, format);
+    int ret = vprintf(format, ap);
+    va_end(ap);
+    return ret;
+}
+
+int sprintf(char *__restrict__ str, const char *__restrict__ format, ...)
 {
     va_list ap;
     va_start(ap, format);
@@ -39,7 +59,8 @@ int sprintf(char *str, const char *format, ...)
     return ret;
 }
 
-int snprintf(char *str, size_t size, const char *format, ...)
+int snprintf(char *__restrict__ str, size_t size,
+             const char *__restrict__ format, ...)
 {
     va_list ap;
     va_start(ap, format);
@@ -48,12 +69,13 @@ int snprintf(char *str, size_t size, const char *format, ...)
     return ret;
 }
 
-int vsprintf(char *str, const char *format, va_list ap)
+int vsprintf(char *__restrict__ str, const char *__restrict__ format, va_list ap)
 {
     return vsnprintf(str, INT_MAX, format, ap);
 }
 
-int vsnprintf(char *str, size_t size, const char *format, va_list ap)
+int vsnprintf(char *__restrict__ str, size_t size,
+              const char *__restrict__ format, va_list ap)
 {
     int cnt = 0;
 

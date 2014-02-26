@@ -17,18 +17,22 @@
 
 #pragma once
 
-#include <cstdarg>
-#include <cstddef>
+#include <cstdint>
 
-// (v)printf() currently just prints to the framebuffer
+namespace Font {
 
-int vprintf(const char *__restrict__ format, va_list ap);
-int vsprintf(char *__restrict__ str, const char *__restrict__ format,
-             va_list ap);
-int vsnprintf(char *__restrict__ str, size_t size,
-              const char *__restrict__ format, va_list ap);
+/*
+ * Each glyph in the framebuffer is 8x16 pixels.
+ * We store 1 glyph as 16 bytes, where each set bit indicates a pixel to draw.
+ */
+struct Glyph {
+    uint8_t data[16];
+};
 
-int printf(const char *__restrict__ format, ...);
-int sprintf(char *__restrict__ str, const char *__restrict__ format, ...);
-int snprintf(char *__restrict__ str, size_t size,
-             const char *__restrict__ format, ...);
+/*
+ * Either returns a non-nullptr pointer to a read-only struct Glyph if c is
+ * valid (>0), or nullptr otherwise.
+ */
+const Glyph *get_glyph(char c);
+
+}
