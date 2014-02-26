@@ -90,8 +90,10 @@ static void put_glyph(const Font::Glyph *glyph, Color fg, Color bg)
 int put_string(const char *s, Color fg, Color bg)
 {
     for (; *s != '\0'; ++s) {
-        if (*s == '\n')
+        if (*s == '\n') {
             newline();
+            continue;
+        }
 
         if (current_width + glyph_width > max_width)
             newline();
