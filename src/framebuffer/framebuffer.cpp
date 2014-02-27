@@ -56,8 +56,8 @@ void init(const EFI_GRAPHICS_OUTPUT_PROTOCOL *gop)
 static void scroll()
 {
     for (unsigned int i = 0; i < max_height-1; ++i)
-        memcpy(&base_address[i*max_width], &base_address[(i+1)*max_width], max_width);
-    memset(&base_address[(max_height-1) * max_width], 0x00, max_width*4);
+        memcpy(&base_address[i*max_width], &base_address[(i+1)*max_width], max_width*4);
+    memset(&base_address[(max_height-1) * max_width], 0x00, max_width*4*4);
 }
 
 static void newline()
