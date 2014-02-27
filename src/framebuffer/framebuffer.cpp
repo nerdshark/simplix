@@ -27,19 +27,21 @@ static uint32_t *base_address;
 // Size of the framebuffer in bytes
 static size_t size;
 
-// max horizontal pixels
+// max visible horizontal pixels
 static unsigned int max_width;
 // max vertical pixels
 static unsigned int max_height;
-// padding between pixels
+// actual amount of horizontal pixels
 static unsigned int pixels_per_scan_line;
 
 static unsigned int current_width;
 static unsigned int current_height;
 
-// Our glyphs (defined in font/font.cpp) are all 9x16.
+// Our glyphs (defined in font/font.cpp) are all 8x16.
 static constexpr unsigned int glyph_width = 8;
 static constexpr unsigned int glyph_height = 16;
+
+static uint32_t color_array[NAVY+1] = { };
 
 void init(const EFI_GRAPHICS_OUTPUT_PROTOCOL *gop)
 {
@@ -50,14 +52,55 @@ void init(const EFI_GRAPHICS_OUTPUT_PROTOCOL *gop)
     pixels_per_scan_line = gop->Mode->Info->PixelsPerScanLine;
     current_width = 0;
     current_height = 0;
+
+    switch (gop->Mode->Info->PixelFormat) {
+    case PixelRedGreenBlueReserved8BitPerColor:
+        color_array[BLACK] = 0x00000000;
+        color_array[WHITE] = 0x00ffffff;
+        color_array[RED] = 0x000000ff;
+        color_array[LIME] = 0x0000ff00;
+        color_array[BLUE] = 0x00ff0000;
+        color_array[YELLOW] = 0x0000ffff;
+        color_array[CYAN] = 0x00ffff00;
+        color_array[MAGENTA] = 0x00ff00ff;
+        color_array[SILVER] = 0x00c0c0c0;
+        color_array[GRAY] = 0x00808080;
+        color_array[MAROON] = 0x00000080;
+        color_array[OLIVE] = 0x00008080;
+        color_array[GREEN] = 0x00008000;
+        color_array[PURPLE] = 0x00800080;
+        color_array[TEAL] = 0x00808000;
+        color_array[NAVY] = 0x00800000;
+        break;
+    case PixelBlueGreenRedReserved8BitPerColor:
+        color_array[BLACK] = 0x00000000;
+        color_array[WHITE] = 0x00ffffff;
+        color_array[RED] = 0x00ff0000;
+        color_array[LIME] = 0x0000ff00;
+        color_array[BLUE] = 0x000000ff;
+        color_array[YELLOW] = 0x00ffff00;
+        color_array[CYAN] = 0x0000ffff;
+        color_array[MAGENTA] = 0x00ff00ff;
+        color_array[SILVER] = 0x00c0c0c0;
+        color_array[GRAY] = 0x00808080;
+        color_array[MAROON] = 0x00800000;
+        color_array[OLIVE] = 0x00808000;
+        color_array[GREEN] = 0x00008000;
+        color_array[PURPLE] = 0x00800080;
+        color_array[TEAL] = 0x00008080;
+        color_array[NAVY] = 0x00000080;
+        break;
+    default:
+        break;
+    }
 }
 
 // Move every line except the first one up, make last row blank
 static void scroll()
 {
     for (unsigned int i = 0; i < max_height-1; ++i)
-        memcpy(&base_address[i*max_width], &base_address[(i+1)*max_width], max_width*4);
-    memset(&base_address[(max_height-1) * max_width], 0x00, max_width*4*4);
+        memcpy(&base_address[i*pixels_per_scan_line], &base_address[(i+1)*pixels_per_scan_line], max_width*4);
+    memset(&base_address[(max_height-1) * pixels_per_scan_line], 0x00, max_width*4*4);
 }
 
 static void newline()
@@ -80,9 +123,9 @@ static void put_glyph(const Font::Glyph *glyph, Color fg, Color bg)
             int width = current_width + j;
 
             if (glyph->data[i] & (0x80 >> j))
-                base_address[height * max_width + width] = fg;
+                base_address[height * pixels_per_scan_line + width] = color_array[fg];
             else
-                base_address[height * max_width + width] = bg;
+                base_address[height * pixels_per_scan_line + width] = color_array[bg];
         }
     }
 }

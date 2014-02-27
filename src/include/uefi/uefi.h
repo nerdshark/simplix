@@ -38,11 +38,21 @@ struct MemoryMap {
     UINT32 descriptor_version;
 };
 
+/*
+ * Fills @map with the current UEFI-provided memory map.
+ */
 void get_memory_map(const EFI_SYSTEM_TABLE *systab, MemoryMap *map);
 
+/*
+ * Returns a pointer to an EFI_GRAPHICS_OUTPUT_PROTOCOL instance that supports
+ * direct framebuffer access and either RGB or BGR colors, nullptr otherwise.
+ */
 EFI_GRAPHICS_OUTPUT_PROTOCOL *get_gop(EFI_HANDLE handle,
                                       const EFI_SYSTEM_TABLE *systab);
 
+/*
+ * Prints '@msg: [@status translated to string]' and halts the CPU.
+ */
 void die(const EFI_SYSTEM_TABLE *systab, EFI_STATUS status, const CHAR16 *msg);
 
 }

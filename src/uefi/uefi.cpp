@@ -71,10 +71,6 @@ void die(const EFI_SYSTEM_TABLE *systab, EFI_STATUS status, const CHAR16 *msg)
     __asm__ volatile ("cli \n\t hlt");
 }
 
-/*
- * Returns a pointer to an EFI_GRAPHICS_OUTPUT_PROTOCOL instance that supports
- * direct framebuffer access, nullptr otherwise.
- */
 EFI_GRAPHICS_OUTPUT_PROTOCOL *get_gop(EFI_HANDLE handle, const EFI_SYSTEM_TABLE *systab)
 {
     EFI_BOOT_SERVICES *bs = systab->BootServices;
@@ -97,16 +93,14 @@ EFI_GRAPHICS_OUTPUT_PROTOCOL *get_gop(EFI_HANDLE handle, const EFI_SYSTEM_TABLE 
         if (EFI_STATUS_IS_ERROR(status))
             die(systab, status, L"OpenProtocol");
 
-        if (gop->Mode->Info->PixelFormat != PixelBltOnly)
+        if (gop->Mode->Info->PixelFormat != PixelBltOnly &&
+            gop->Mode->Info->PixelFormat != PixelBitMask)
             return gop;
     }
 
     return nullptr;
 }
 
-/*
- * Fills @map with the current UEFI-provided memory map.
- */
 void get_memory_map(const EFI_SYSTEM_TABLE *systab, MemoryMap *map)
 {
     EFI_BOOT_SERVICES *bs = systab->BootServices;
