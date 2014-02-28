@@ -39,7 +39,7 @@ static int char_to_value(char c)
 uintmax_t strtoumax(const char *__restrict__ nptr, char **__restrict__ endptr,
                     int base, Errno &err)
 {
-    if ((base <= 2 || base >= 36) && base != 0) {
+    if ((base < 2 || base > 36) && base != 0) {
         err = Errno::EINVAL;
         return 0;
     }
@@ -121,7 +121,7 @@ end:
 intmax_t strtoimax(const char *__restrict__ nptr, char **__restrict__ endptr,
                    int base, Errno &err)
 {
-    if ((base <= 2 || base >= 36) && base != 0) {
+    if ((base < 2 || base > 36) && base != 0) {
         err = Errno::EINVAL;
         return -1;
     }
