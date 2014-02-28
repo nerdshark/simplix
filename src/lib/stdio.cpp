@@ -33,6 +33,12 @@ static int unsigned_num_to_str(char *str, size_t size, uintmax_t x, int base,
 
 int vprintf(const char *__restrict__ format, va_list ap)
 {
+    // You may ask yourself: why 3920???
+    // answer: that's the amount I can allocate here without causing
+    // an 'undefined blabla ___chkstk_ms' gcc failure.
+    // My only theory is that, as soon as a stack frame reaches a certain size,
+    // gcc tries to run some stack-checking code on it, which for whatever
+    // reason(freestanding?) is not there.
     char buf[3920];
     int ret = vsnprintf(buf, sizeof(buf), format, ap);
     if (ret == -1)
@@ -137,6 +143,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
                     if (ret == -1 || add_would_overflow(cnt, ret, INT_MAX))
                         return -1;
                     cnt += ret; }
+                    break;
                 default:
                     return -1;
                 }
@@ -183,6 +190,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
                     if (ret == -1 || add_would_overflow(cnt, ret, INT_MAX))
                         return -1;
                     cnt += ret; }
+                    break;
                 default:
                     return -1;
                 }
@@ -235,6 +243,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
                     if (ret == -1 || add_would_overflow(cnt, ret, INT_MAX))
                         return -1;
                     cnt += ret; }
+                    break;
                 default:
                     return -1;
                 }
@@ -281,6 +290,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
                     if (ret == -1 || add_would_overflow(cnt, ret, INT_MAX))
                         return -1;
                     cnt += ret; }
+                    break;
                 default:
                     return -1;
                 }
@@ -331,6 +341,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
                 if (ret == -1 || add_would_overflow(cnt, ret, INT_MAX))
                     return -1;
                 cnt += ret; }
+                break;
             default:
                 return -1;
             }
@@ -369,6 +380,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
                 if (ret == -1 || add_would_overflow(cnt, ret, INT_MAX))
                     return -1;
                 cnt += ret; }
+                break;
             default:
                 return -1;
             }
@@ -435,8 +447,8 @@ int vsnprintf(char *__restrict__ str, size_t size,
             unsigned char val = va_arg(ap, int);
             if ((size_t)cnt < size)
                 str[cnt] = val;
-            ++cnt;
-            break; }
+            ++cnt; }
+            break;
         case 's': {
             ++format;
             char *val = va_arg(ap, char *);
