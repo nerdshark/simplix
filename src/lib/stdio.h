@@ -20,15 +20,35 @@
 #include <cstdarg>
 #include <cstddef>
 
-// (v)printf() currently just prints to the framebuffer
+/*
+ * These functions work just like their std counterpart.
+ * However, not all features of a standard-conforming printf() are supported
+ * at the moment.
+ * Supported at the moment are:
+ * - length-modifiers
+ * - all conversion specifiers _except_ the floating-point ones.
+ *
+ * Currently, (v)printf() unconditionally prints to the framebuffer,
+ * so do not call printf before the framebuffer is initialized!
+ */
 
-int vprintf(const char *__restrict__ format, va_list ap);
+int vprintf(const char *__restrict__ format, va_list ap)
+__attribute__((format(__printf__, 1, 0)));
+
 int vsprintf(char *__restrict__ str, const char *__restrict__ format,
-             va_list ap);
-int vsnprintf(char *__restrict__ str, size_t size,
-              const char *__restrict__ format, va_list ap);
+             va_list ap)
+__attribute__((format(__printf__, 2, 0)));
 
-int printf(const char *__restrict__ format, ...);
-int sprintf(char *__restrict__ str, const char *__restrict__ format, ...);
+int vsnprintf(char *__restrict__ str, size_t size,
+              const char *__restrict__ format, va_list ap)
+__attribute__((format(__printf__, 3, 0)));
+
+int printf(const char *__restrict__ format, ...)
+__attribute__((format(__printf__, 1, 2)));
+
+int sprintf(char *__restrict__ str, const char *__restrict__ format, ...)
+__attribute__((format(__printf__, 2, 3)));
+
 int snprintf(char *__restrict__ str, size_t size,
-             const char *__restrict__ format, ...);
+             const char *__restrict__ format, ...)
+__attribute__((format(__printf__, 3, 4)));
