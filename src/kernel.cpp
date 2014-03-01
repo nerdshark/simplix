@@ -18,6 +18,7 @@
 #include <uefi/uefi.h>
 #include <framebuffer/framebuffer.h>
 #include <lib/stdio.h>
+#include <cpuid/cpuid.h>
 
 extern "C"
 EFI_STATUS EFIAPI kmain(EFI_HANDLE handle, EFI_SYSTEM_TABLE *systab)
@@ -40,7 +41,8 @@ EFI_STATUS EFIAPI kmain(EFI_HANDLE handle, EFI_SYSTEM_TABLE *systab)
     if (EFI_STATUS_IS_ERROR(status))
         UEFI::die(systab, status, L"ExitBootServices");
 
-    printf("Welcome to Simplix!");
+    char buf[13];
+    printf("Welcome to Simplix! [CPU: %s]\n", CPUID::get_vendor_string(buf));
 
     // Just halt for now
     __asm__ volatile ("cli \n\t hlt");
