@@ -111,30 +111,60 @@ int strncmp(const char *s1, const char *s2, size_t n)
     return 0;
 }
 
-char *strchr(const char *s, int c)
+static const char *_strchr(const char *s, int c)
 {
     for (; *s != '\0'; ++s)
         if (*s == c)
-            return (char *)s;
+            return s;
 
     return nullptr;
 }
 
-char *strrchr(const char *s, int c)
+const char *strchr(const char *s, int c)
 {
-    char *p = nullptr;
+    return _strchr(s, c);
+}
+
+char *strchr(char *s, int c)
+{
+    return (char *)_strchr(s, c);
+}
+
+static const char *_strrchr(const char *s, int c)
+{
+    const char *p = nullptr;
     while ((s = strchr(s, c)) != nullptr)
-        p = (char *)s;
+        p = s;
 
     return p;
 }
 
-char *strchrnul(const char *s, int c)
+const char *strrchr(const char *s, int c)
+{
+    return _strrchr(s, c);
+}
+
+char *strrchr(char *s, int c)
+{
+    return (char *)_strrchr(s, c);
+}
+
+static const char *_strchrnul(const char *s, int c)
 {
     for (; *s != '\0' && *s != c; ++s)
         ;
 
-    return (char *)s;
+    return s;
+}
+
+const char *strchrnul(const char *s, int c)
+{
+    return _strchrnul(s, c);
+}
+
+char *strchrnul(char *s, int c)
+{
+    return (char *)_strchrnul(s, c);
 }
 
 size_t strspn(const char *s, const char *accept)
@@ -152,7 +182,7 @@ size_t strspn(const char *s, const char *accept)
 
 size_t strcspn(const char *s, const char *reject)
 {
-    char *p = strpbrk(s, reject);
+    const char *p = strpbrk(s, reject);
     if (p != nullptr && *p == *s)
         return 0;
 
@@ -163,54 +193,104 @@ size_t strcspn(const char *s, const char *reject)
     return len;
 }
 
-char *strpbrk(const char *s, const char *accept)
+static const char *_strpbrk(const char *s, const char *accept)
 {
     for (; *s != '\0'; ++s)
         if (strchr(accept, *s) != nullptr)
-            return (char *)s;
+            return s;
 
     return nullptr;
 }
 
-char *strstr(const char *haystack, const char *needle)
+const char *strpbrk(const char *s, const char *accept)
+{
+    return _strpbrk(s, accept);
+}
+
+char *strpbrk(char *s, const char *accept)
+{
+    return (char *)_strpbrk(s, accept);
+}
+
+static const char *_strstr(const char *haystack, const char *needle)
 {
     for (; *haystack != '\0'; ++haystack)
         if (strcmp(haystack, needle) == 0)
-            return (char *)haystack;
+            return haystack;
 
     return nullptr;
 }
 
-void *memchr(const void *s, int c, size_t n)
+const char *strstr(const char *haystack, const char *needle)
+{
+    return _strstr(haystack, needle);
+}
+
+char *strstr(char *haystack, const char *needle)
+{
+    return (char *)_strstr(haystack, needle);
+}
+
+static const void *_memchr(const void *s, int c, size_t n)
 {
     const unsigned char *t = (const unsigned char *)s;
 
     for (size_t i = 0; i < n; ++i)
         if (t[i] == c)
-            return (void *)(t+i);
+            return t+i;
 
     return nullptr;
 }
 
-void *memrchr(const void *s, int c, size_t n)
+const void *memchr(const void *s, int c, size_t n)
+{
+    return _memchr(s, c, n);
+}
+
+void *memchr(void *s, int c, size_t n)
+{
+    return (void *)_memchr(s, c, n);
+}
+
+static const void *_memrchr(const void *s, int c, size_t n)
 {
     const unsigned char *t = (const unsigned char *)s;
 
     for (size_t i = n; i > 0; --i)
         if (t[i-1] == c)
-            return (void *)(t+i-1);
+            return t+i-1;
 
     return nullptr;
 }
 
-void *rawmemchr(const void *s, int c)
+const void *memrchr(const void *s, int c, size_t n)
+{
+    return _memrchr(s, c, n);
+}
+
+void *memrchr(void *s, int c, size_t n)
+{
+    return (void *)_memrchr(s, c, n);
+}
+
+static const void *_rawmemchr(const void *s, int c)
 {
     const unsigned char *t = (const unsigned char *)s;
 
     while (*t != c)
         ++t;
 
-    return (void *)t;
+    return t;
+}
+
+const void *rawmemchr(const void *s, int c)
+{
+    return _rawmemchr(s, c);
+}
+
+void *rawmemchr(void *s, int c)
+{
+    return (void *)_rawmemchr(s, c);
 }
 
 int memcmp(const void *s1, const void *s2, size_t n)
