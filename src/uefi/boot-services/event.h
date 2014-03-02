@@ -19,11 +19,11 @@
 
 #include <uefi/types.h>
 
-enum EFI_TIMER_DELAY {
+typedef enum {
     TimerCancel,
     TimerPeriodic,
     TimerRelative
-};
+} EFI_TIMER_DELAY;
 
 typedef VOID (EFIAPI *EFI_EVENT_NOTIFY)
 (EFI_EVENT Event, VOID *Context);

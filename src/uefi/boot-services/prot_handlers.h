@@ -19,22 +19,22 @@
 
 #include <uefi/types.h>
 
-enum EFI_INTERFACE_TYPE {
+typedef enum {
     EFI_NATIVE_INTERFACE
-};
+} EFI_INTERFACE_TYPE;
 
-enum EFI_LOCATE_SEARCH_TYPE {
+typedef enum {
     AllHandles,
     ByRegisterNotify,
     ByProtocol
-};
+} EFI_LOCATE_SEARCH_TYPE;
 
-struct EFI_OPEN_PROTOCOL_INFORMATION_ENTRY {
+typedef struct {
     EFI_HANDLE AgentHandle;
     EFI_HANDLE ControllerHandle;
     UINT32 Attribute;
     UINT32 OpenCount;
-};
+} EFI_OPEN_PROTOCOL_INFORMATION_ENTRY;
 
 typedef EFI_STATUS (EFIAPI *EFI_INSTALL_PROTOCOL_INTERFACE)
 (EFI_HANDLE *Handle, EFI_GUID *Protocol, EFI_INTERFACE_TYPE InterfaceType,

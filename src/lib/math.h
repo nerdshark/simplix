@@ -17,46 +17,27 @@
 
 #pragma once
 
-#include <climits>
-#include <cstdint>
+#include <limits.h>
+#include <stdint.h>
 #include <lib/error.h>
-#include <type_traits>
 
-int pow(int x, unsigned int y, Errno &err);
+int pow(int x, unsigned int y, error_code_t *err);
 
 int abs(int i);
 long labs(long i);
 long long llabs(long long i);
 intmax_t imaxabs(intmax_t i);
 
-template<class T>
-typename std::make_unsigned<T>::type unsigned_abs(T x)
-{
-    return x < 0 ? -x : x;
-}
+#define MULTIPLY_WOULD_OVERFLOW(val1, val2, max) \
+    ((val1) > 0 ? ((val2) > 0 ? ((uintmax_t)(val1) > (uintmax_t)((max) / (val2))) : 0) \
+    : ((val2) > 0 ? 0 : ((val1) != 0 && (val2) < (max) / (val1))))
 
-template <class T, class U>
-bool multiply_would_overflow(T val1, U val2, uintmax_t max)
-{
-    return (val1 > 0 && val2 > 0 && val1 > max / val2)
-        || (val1 < 0 && val2 < 0 && val1 < max / val2);
-}
+#define MULTIPLY_WOULD_UNDERFLOW(val1, val2, min) \
+    (((val1) > 0 && (val2) < 0 && (val2) < (min) / (val1)) || \
+     ((val1) < 0 && (val2) > 0 && (val1) < (min) / (val2)))
 
-template<class T, class U>
-bool multiply_would_underflow(T val1, U val2, intmax_t min)
-{
-    return (val1 > 0 && val2 < 0 && val1 < min / val2)
-        || (val1 < 0 && val2 > 0 && val1 > min / val2);
-}
+#define ADD_WOULD_OVERFLOW(val1, val2, max) \
+    ((val1) > 0 && (val2) > 0 && (val1) > (max) - (val2))
 
-template <class T, class U>
-bool add_would_overflow(T val1, U val2, uintmax_t max)
-{
-    return val1 > 0 && val2 > 0 && val1 > max - val2;
-}
-
-template <class T, class U>
-bool add_would_underflow(T val1, U val2, intmax_t min)
-{
-    return val1 < 0 && val2 < 0 && val1 < min - val2;
-}
+#define ADD_WOULD_UNDERFLOW(val1, val2, min) \
+    ((val1) < 0 && (val2) < 0 && (val1) < (min) - (val2))

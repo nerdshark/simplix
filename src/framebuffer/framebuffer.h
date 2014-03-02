@@ -17,14 +17,12 @@
 
 #pragma once
 
-#include <cstdint>
-#include <cstddef>
+#include <stdint.h>
+#include <stddef.h>
 #include <uefi/protocols/console/gop.h>
 
-namespace Framebuffer {
-
 // We support only the basic colors for now
-enum Color {
+typedef enum {
     BLACK,
     WHITE,
     RED,
@@ -41,14 +39,10 @@ enum Color {
     PURPLE,
     TEAL,
     NAVY
-};
+} framebuffer_color_t;
 
 // Call that the first time before doing anything with the framebuffer!
-void init(const EFI_GRAPHICS_OUTPUT_PROTOCOL *gop);
+void framebuffer_init(const EFI_GRAPHICS_OUTPUT_PROTOCOL *gop);
 
-int put_string(const char *s, Color fg, Color bg);
-
-// Black on white
-int put_string(const char *s);
-
-}
+int framebuffer_put_string(const char *s, framebuffer_color_t fg,
+                           framebuffer_color_t bg);

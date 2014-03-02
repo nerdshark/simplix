@@ -17,20 +17,18 @@
 
 #pragma once
 
-#include <cstdint>
+#include <stdint.h>
 
-namespace CPUID {
-
-inline void cpuid(uint32_t eax_in, uint32_t ecx_in, uint32_t *__restrict__ eax_out,
-                  uint32_t *__restrict__ ebx_out, uint32_t *__restrict__ ecx_out,
-                  uint32_t *__restrict__ edx_out)
+inline void cpuid(uint32_t eax_in, uint32_t ecx_in, uint32_t *restrict eax_out,
+                  uint32_t *restrict ebx_out, uint32_t *restrict ecx_out,
+                  uint32_t *restrict edx_out)
 {
     __asm__ volatile ("cpuid" : "=a"(*eax_out), "=b"(*ebx_out), "=c"(*ecx_out),
                       "=d"(*edx_out) : "a"(eax_in), "c"(ecx_in));
 }
 
 // @buf needs to be at least 13 bytes large
-inline char *get_vendor_string(char *buf)
+inline char *cpuid_get_vendor_string(char *buf)
 {
     uint32_t eax;
     uint32_t *p = (uint32_t *)buf;
@@ -43,7 +41,7 @@ inline char *get_vendor_string(char *buf)
  * Version Information as defined by Figure 3-5 in Intel's instruction set
  * manual.
  */
-struct VersionInfo {
+struct cpuid_version_info {
     uint32_t stepping_id:4;
     uint32_t model:4;
     uint32_t family_id:4;
@@ -54,28 +52,28 @@ struct VersionInfo {
     uint32_t res2:4;
 };
 
-static_assert(sizeof(VersionInfo) == sizeof(uint32_t), "size mismatch");
+_Static_assert(sizeof(struct cpuid_version_info) == sizeof(uint32_t), "size mismatch");
 
-inline VersionInfo get_version_info()
+inline struct cpuid_version_info cpuid_get_version_info()
 {
-    VersionInfo eax;
+    struct cpuid_version_info eax;
     uint32_t ebx, ecx, edx;
     cpuid(0x01, 0x00, (uint32_t *)&eax, &ebx, &ecx, &edx);
     return eax;
 }
 
-struct AuxInfo {
+struct cpuid_aux_info {
     uint8_t brand_index;
     uint8_t clflush_line_size;
     uint8_t max_num_cpus;
     uint8_t initial_apic_id;
 };
 
-static_assert(sizeof(AuxInfo) == sizeof(uint32_t), "size mismatch");
+_Static_assert(sizeof(struct cpuid_aux_info) == sizeof(uint32_t), "size mismatch");
 
-inline AuxInfo get_aux_info()
+inline struct cpuid_aux_info get_aux_info()
 {
-    AuxInfo ebx;
+    struct cpuid_aux_info ebx;
     uint32_t eax, ecx, edx;
     cpuid(0x01, 0x00, &eax, (uint32_t *)&ebx, &ecx, &edx);
     return ebx;
@@ -85,7 +83,7 @@ inline AuxInfo get_aux_info()
  * Feature information as returned by CPUID in ECX & EDX for EAX == 0x01.
  * Defined in Figures 3-6 & Figure 3-7 of Intel's instruction reference manual.
  */
-struct FeatureInfo {
+struct cpuid_feature_info {
     uint32_t sse3:1; // SSE3 extensions
     uint32_t pclmulqdq:1; // Carryless Multiplication
     uint32_t dtes64:1; // 64-bit DS Area
@@ -153,14 +151,12 @@ struct FeatureInfo {
     uint32_t pbe:1; // Pend. Brk. EN.
 };
 
-static_assert(sizeof(FeatureInfo) == sizeof(uint64_t), "size mismatch");
+_Static_assert(sizeof(struct cpuid_feature_info) == sizeof(uint64_t), "size mismatch");
 
-inline FeatureInfo get_feature_info()
+inline struct cpuid_feature_info get_feature_info()
 {
-    FeatureInfo ecx_edx;
+    struct cpuid_feature_info ecx_edx;
     uint32_t eax, ebx;
     cpuid(0x01, 0x00, &eax, &ebx, (uint32_t *)&ecx_edx, (uint32_t *)&ecx_edx+1);
     return ecx_edx;
-}
-
 }

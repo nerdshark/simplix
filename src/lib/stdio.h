@@ -17,8 +17,8 @@
 
 #pragma once
 
-#include <cstdarg>
-#include <cstddef>
+#include <stdarg.h>
+#include <stddef.h>
 
 /*
  * These functions work just like their std counterpart.
@@ -32,23 +32,20 @@
  * so do not call printf before the framebuffer is initialized!
  */
 
-int vprintf(const char *__restrict__ format, va_list ap)
-__attribute__((format(__printf__, 1, 0)));
+int vprintf(const char *restrict format, va_list ap)
+__attribute((format(printf, 1, 0)));
 
-int vsprintf(char *__restrict__ str, const char *__restrict__ format,
-             va_list ap)
-__attribute__((format(__printf__, 2, 0)));
+int vsprintf(char *restrict str, const char *restrict format, va_list ap)
+__attribute((format(printf, 2, 0)));
 
-int vsnprintf(char *__restrict__ str, size_t size,
-              const char *__restrict__ format, va_list ap)
-__attribute__((format(__printf__, 3, 0)));
+int vsnprintf(char *restrict str, size_t size, const char *restrict format, va_list ap)
+__attribute((format(printf, 3, 0)));
 
-int printf(const char *__restrict__ format, ...)
-__attribute__((format(__printf__, 1, 2)));
+int printf(const char *restrict format, ...)
+__attribute((format(printf, 1, 2)));
 
-int sprintf(char *__restrict__ str, const char *__restrict__ format, ...)
-__attribute__((format(__printf__, 2, 3)));
+int sprintf(char *restrict str, const char *restrict format, ...)
+__attribute((format(printf, 2, 3)));
 
-int snprintf(char *__restrict__ str, size_t size,
-             const char *__restrict__ format, ...)
-__attribute__((format(__printf__, 3, 4)));
+int snprintf(char *restrict str, size_t size, const char *restrict format, ...)
+__attribute((format(printf, 3, 4)));

@@ -17,20 +17,10 @@
 
 #pragma once
 
-class Errno {
-public:
-    enum ErrorCode {
-        SUCCESS,
-        EINVAL,
-        ERANGE
-    };
+typedef enum {
+    SUCCESS,
+    EINVAL,
+    ERANGE
+} error_code_t;
 
-    Errno(ErrorCode code) : code(code) { }
-
-    bool operator==(ErrorCode x) { return x == code; }
-    bool operator!=(ErrorCode x) { return x != code; }
-    ErrorCode operator=(ErrorCode x) { return code = x; }
-    const char *to_string() const;
-private:
-    ErrorCode code;
-};
+const char *error_code_to_str(error_code_t error_code);

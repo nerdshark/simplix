@@ -20,31 +20,30 @@
 #include <lib/stdio.h>
 #include <cpuid/cpuid.h>
 
-extern "C"
 EFI_STATUS EFIAPI kmain(EFI_HANDLE handle, EFI_SYSTEM_TABLE *systab)
 {
     EFI_STATUS status;
     EFI_BOOT_SERVICES *bs = systab->BootServices;
 
-    EFI_GRAPHICS_OUTPUT_PROTOCOL *gop = UEFI::get_gop(handle, systab);
-    if (gop == nullptr) {
-        UEFI::print(systab->ConOut, L"No GOP framebuffer support!\r\n");
-        __asm__ volatile ("cli \n\t hlt");
+    EFI_GRAPHICS_OUTPUT_PROTOCOL *gop = uefi_get_gop(handle, systab);
+    if (gop == NULL) {
+        uefi_print(systab->ConOut, L"No GOP framebuffer support!\r\n");
+        __asm volatile ("cli \n\t hlt");
     }
 
-    Framebuffer::init(gop);
+    framebuffer_init(gop);
 
-    UEFI::MemoryMap memory_map;
-    UEFI::get_memory_map(systab, &memory_map);
+    struct uefi_memory_map memory_map;
+    uefi_get_memory_map(systab, &memory_map);
 
     status = bs->ExitBootServices(handle, memory_map.map_key);
     if (EFI_STATUS_IS_ERROR(status))
-        UEFI::die(systab, status, L"ExitBootServices");
+        uefi_die(systab, status, L"ExitBootServices");
 
     char buf[13];
-    printf("Welcome to Simplix! [CPU: %s]\n", CPUID::get_vendor_string(buf));
+    printf("Welcome to Simplix! [CPU: %s]\n", cpuid_get_vendor_string(buf));
 
     // Just halt for now
-    __asm__ volatile ("cli \n\t hlt");
+    __asm volatile ("cli \n\t hlt");
     return EFI_SUCCESS;
 }

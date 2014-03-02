@@ -24,11 +24,11 @@
 
 #define EFI_UNSPECIFIED_TIMEZONE 0x07FF
 
-struct EFI_TIME_CAPABILITIES {
+typedef struct {
     UINT32 Resolution;
     UINT32 Accuracy;
     BOOLEAN SetsToZero;
-};
+} EFI_TIME_CAPABILITIES;
 
 typedef EFI_STATUS (EFIAPI *EFI_GET_TIME)
 (EFI_TIME *Time, EFI_TIME_CAPABILITIES *Capabilities);

@@ -21,14 +21,15 @@
  * UEFI data types. See UEFI spec. 2.3.1.
  */
 
-#include <cstdint>
+#include <stdint.h>
+#include <stddef.h>
 
-#define EFIAPI __attribute__((ms_abi))
+#define EFIAPI __attribute((ms_abi))
 #define CONST const
 
 typedef uint8_t BOOLEAN;
-constexpr BOOLEAN FALSE = 0;
-constexpr BOOLEAN TRUE = 1;
+#define FALSE 0
+#define TRUE 1
 typedef int64_t INTN;
 typedef uint64_t UINTN;
 typedef int8_t INT8;
@@ -40,7 +41,7 @@ typedef uint32_t UINT32;
 typedef int64_t INT64;
 typedef uint64_t UINT64;
 typedef char CHAR8;
-static_assert(sizeof(wchar_t) == 2, "wchar_t is not 16-bit!");
+_Static_assert(sizeof(wchar_t) == 2, "wchar_t is not 16-bit!");
 typedef wchar_t CHAR16;
 typedef void VOID;
 typedef UINTN EFI_STATUS;
@@ -50,7 +51,7 @@ typedef UINT64 EFI_PHYSICAL_ADDRESS;
 typedef UINT64 EFI_VIRTUAL_ADDRESS;
 typedef VOID *EFI_HANDLE;
 
-struct EFI_GUID {
+typedef struct {
     UINT32 Data1;
     UINT16 Data2;
     UINT16 Data3;
@@ -62,15 +63,15 @@ struct EFI_GUID {
     UINT8 Data9;
     UINT8 Data11;
     UINT8 Data12;
-};
+} EFI_GUID;
 
-struct EFI_DEVICE_PATH_PROTOCOL {
+typedef struct {
     UINT8 Type;
     UINT8 SubType;
     UINT8 Length[2];
-};
+} EFI_DEVICE_PATH_PROTOCOL;
 
-struct EFI_TIME {
+typedef struct {
     UINT16 Year;
     UINT8 Month;
     UINT8 Day;
@@ -82,17 +83,17 @@ struct EFI_TIME {
     INT16 TimeZone;
     UINT8 DayLight;
     UINT8 Pad2;
-};
+} EFI_TIME;
 
-struct WIN_CERTIFICATE {
+typedef struct {
     UINT32 dwLength;
     UINT16 wRevision;
     UINT16 wCertificateType;
     // UINT8 bCertificate[ANYSIZE_ARRAY]
-};
+} WIN_CERTIFICATE;
 
-struct WIN_CERTIFICATE_UEFI_GUID {
+typedef struct {
     WIN_CERTIFICATE Hdr;
     EFI_GUID CertType;
     UINT8 CertData[1];
-};
+} WIN_CERTIFICATE_UEFI_GUID;

@@ -19,24 +19,15 @@
 
 #include <uefi/types.h>
 
-constexpr EFI_STATUS EFI_HIGH_BIT = 0x8000000000000000;
+#define EFI_HIGH_BIT 0x8000000000000000
 
-inline constexpr EFI_STATUS EFI_ERROR(int x)
-{
-    return x | EFI_HIGH_BIT;
-}
+#define EFI_ERROR(x) ((x) | EFI_HIGH_BIT)
 
-inline constexpr EFI_STATUS EFI_ERROR_TO_NORM(EFI_STATUS x)
-{
-    return x & ~EFI_HIGH_BIT;
-}
+#define EFI_ERROR_TO_NORM(x) ((x) & ~EFI_HIGH_BIT)
 
-inline constexpr bool EFI_STATUS_IS_ERROR(EFI_STATUS x)
-{
-    return x & EFI_HIGH_BIT;
-}
+#define EFI_STATUS_IS_ERROR(x) ((x) & EFI_HIGH_BIT)
 
-enum : EFI_STATUS {
+enum {
     EFI_SUCCESS = 0,
     EFI_LOAD_ERROR = EFI_ERROR(1),
     EFI_INVALID_PARAMETER = EFI_ERROR(2),

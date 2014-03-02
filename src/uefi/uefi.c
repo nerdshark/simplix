@@ -17,9 +17,7 @@
 
 #include <uefi/uefi.h>
 
-namespace UEFI {
-
-CONST CHAR16 *status_array[] = {
+static const CHAR16 *status_array[] = {
     [EFI_SUCCESS] = L"Success",
     [EFI_ERROR_TO_NORM(EFI_LOAD_ERROR)] = L"Load error",
     [EFI_ERROR_TO_NORM(EFI_INVALID_PARAMETER)] = L"Invalid parameter",
@@ -57,21 +55,22 @@ CONST CHAR16 *status_array[] = {
     [EFI_ERROR_TO_NORM(EFI_IP_ADDRESS_CONFLICT)] = L"IP address conflict"
 };
 
-CONST CHAR16 *error_to_string(EFI_STATUS status)
+const CHAR16 *uefi_error_to_string(EFI_STATUS status)
 {
     return status_array[EFI_ERROR_TO_NORM(status)];
 }
 
-void die(const EFI_SYSTEM_TABLE *systab, EFI_STATUS status, const CHAR16 *msg)
+void uefi_die(const EFI_SYSTEM_TABLE *systab, EFI_STATUS status, const CHAR16 *msg)
 {
-    print(systab->ConOut, (CHAR16 *)msg);
-    print(systab->ConOut, L": ");
-    print(systab->ConOut, error_to_string(status));
-    print(systab->ConOut, L"\r\n");
+    uefi_print(systab->ConOut, msg);
+    uefi_print(systab->ConOut, L": ");
+    uefi_print(systab->ConOut, uefi_error_to_string(status));
+    uefi_print(systab->ConOut, L"\r\n");
     __asm__ volatile ("cli \n\t hlt");
 }
 
-EFI_GRAPHICS_OUTPUT_PROTOCOL *get_gop(EFI_HANDLE handle, const EFI_SYSTEM_TABLE *systab)
+EFI_GRAPHICS_OUTPUT_PROTOCOL *uefi_get_gop(EFI_HANDLE handle,
+                                           const EFI_SYSTEM_TABLE *systab)
 {
     EFI_BOOT_SERVICES *bs = systab->BootServices;
 
@@ -80,28 +79,28 @@ EFI_GRAPHICS_OUTPUT_PROTOCOL *get_gop(EFI_HANDLE handle, const EFI_SYSTEM_TABLE 
     UINTN num;
     EFI_HANDLE *handles;
 
-    EFI_STATUS status = bs->LocateHandleBuffer(ByProtocol, &gop_guid, nullptr,
+    EFI_STATUS status = bs->LocateHandleBuffer(ByProtocol, &gop_guid, NULL,
                                                &num, &handles);
     if (EFI_STATUS_IS_ERROR(status))
-        die(systab, status, L"LocateHandleBuffer");
+        uefi_die(systab, status, L"LocateHandleBuffer");
 
     EFI_GRAPHICS_OUTPUT_PROTOCOL *gop;
 
     for (UINTN i = 0; i < num; ++i) {
         status = bs->OpenProtocol(handles[i], &gop_guid, (VOID **)&gop, handle,
-                                  nullptr, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
+                                  NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
         if (EFI_STATUS_IS_ERROR(status))
-            die(systab, status, L"OpenProtocol");
+            uefi_die(systab, status, L"OpenProtocol");
 
         if (gop->Mode->Info->PixelFormat != PixelBltOnly &&
             gop->Mode->Info->PixelFormat != PixelBitMask)
             return gop;
     }
 
-    return nullptr;
+    return NULL;
 }
 
-void get_memory_map(const EFI_SYSTEM_TABLE *systab, MemoryMap *map)
+void uefi_get_memory_map(const EFI_SYSTEM_TABLE *systab, struct uefi_memory_map *map)
 {
     EFI_BOOT_SERVICES *bs = systab->BootServices;
 
@@ -110,21 +109,19 @@ void get_memory_map(const EFI_SYSTEM_TABLE *systab, MemoryMap *map)
                                          &map->map_key, &map->descriptor_size,
                                          &map->descriptor_version);
     if (EFI_STATUS_IS_ERROR(status) && status != EFI_BUFFER_TOO_SMALL)
-        die(systab, status, L"GetMemoryMap");
+        uefi_die(systab, status, L"GetMemoryMap");
 
     do {
         map->memory_map_size *= 2;
         status = bs->AllocatePool(EfiLoaderData, map->memory_map_size,
                                   (VOID **)&map->memory_map);
         if (EFI_STATUS_IS_ERROR(status))
-            die(systab, status, L"AllocatePool");
+            uefi_die(systab, status, L"AllocatePool");
 
         status = bs->GetMemoryMap(&map->memory_map_size, map->memory_map,
                                   &map->map_key, &map->descriptor_size,
                                   &map->descriptor_version);
         if (EFI_STATUS_IS_ERROR(status) && status != EFI_BUFFER_TOO_SMALL)
-            die(systab, status, L"GetMemoryMap");
+            uefi_die(systab, status, L"GetMemoryMap");
     } while (status == EFI_BUFFER_TOO_SMALL);
-}
-
 }

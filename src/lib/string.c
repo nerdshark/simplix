@@ -17,7 +17,7 @@
 
 #include <lib/string.h>
 
-char *strcpy(char *__restrict__ dest, const char *__restrict__ src)
+char *strcpy(char *restrict dest, const char *restrict src)
 {
     char *tmp = dest;
     while ((*tmp++ = *src++) != '\0')
@@ -26,7 +26,7 @@ char *strcpy(char *__restrict__ dest, const char *__restrict__ src)
     return dest;
 }
 
-char *strncpy(char *__restrict__ dest, const char *__restrict__ src, size_t n)
+char *strncpy(char *restrict dest, const char *restrict src, size_t n)
 {
     size_t i = 0;
     for (; i < n && src[i] != '\0'; ++i)
@@ -48,7 +48,7 @@ size_t strlen(const char *s)
     return len;
 }
 
-char *strcat(char *__restrict__ dest, const char *__restrict__ src)
+char *strcat(char *restrict dest, const char *restrict src)
 {
     char *tmp = dest;
 
@@ -61,7 +61,7 @@ char *strcat(char *__restrict__ dest, const char *__restrict__ src)
     return dest;
 }
 
-char *strncat(char *__restrict__ dest, const char *__restrict__ src, size_t n)
+char *strncat(char *restrict dest, const char *restrict src, size_t n)
 {
     char *tmp = dest;
 
@@ -111,70 +111,40 @@ int strncmp(const char *s1, const char *s2, size_t n)
     return 0;
 }
 
-static const char *_strchr(const char *s, int c)
+char *strchr(const char *s, int c)
 {
     for (; *s != '\0'; ++s)
         if (*s == c)
-            return s;
+            return (char *)s;
 
-    return nullptr;
+    return NULL;
 }
 
-const char *strchr(const char *s, int c)
+char *strrchr(const char *s, int c)
 {
-    return _strchr(s, c);
-}
-
-char *strchr(char *s, int c)
-{
-    return (char *)_strchr(s, c);
-}
-
-static const char *_strrchr(const char *s, int c)
-{
-    const char *p = nullptr;
-    while ((s = strchr(s, c)) != nullptr)
-        p = s;
+    char *p = NULL;
+    while ((s = strchr(s, c)) != NULL)
+        p = (char *)s;
 
     return p;
 }
 
-const char *strrchr(const char *s, int c)
-{
-    return _strrchr(s, c);
-}
-
-char *strrchr(char *s, int c)
-{
-    return (char *)_strrchr(s, c);
-}
-
-static const char *_strchrnul(const char *s, int c)
+char *strchrnul(const char *s, int c)
 {
     for (; *s != '\0' && *s != c; ++s)
         ;
 
-    return s;
-}
-
-const char *strchrnul(const char *s, int c)
-{
-    return _strchrnul(s, c);
-}
-
-char *strchrnul(char *s, int c)
-{
-    return (char *)_strchrnul(s, c);
+    return (char *)s;
 }
 
 size_t strspn(const char *s, const char *accept)
 {
     s = strpbrk(s, accept);
-    if (s == nullptr)
+    if (s == NULL)
         return 0;
 
     size_t len = 0;
-    while (strchr(accept, *s++) != nullptr)
+    while (strchr(accept, *s++) != NULL)
         ++len;
 
     return len;
@@ -182,121 +152,71 @@ size_t strspn(const char *s, const char *accept)
 
 size_t strcspn(const char *s, const char *reject)
 {
-    const char *p = strpbrk(s, reject);
-    if (p != nullptr && *p == *s)
+    char *p = strpbrk(s, reject);
+    if (p != NULL && *p == *s)
         return 0;
 
     size_t len = 0;
-    while (strchr(reject, *s++) == nullptr)
+    while (strchr(reject, *s++) == NULL)
         ++len;
 
     return len;
 }
 
-static const char *_strpbrk(const char *s, const char *accept)
+char *strpbrk(const char *s, const char *accept)
 {
     for (; *s != '\0'; ++s)
-        if (strchr(accept, *s) != nullptr)
-            return s;
+        if (strchr(accept, *s) != NULL)
+            return (char *)s;
 
-    return nullptr;
+    return NULL;
 }
 
-const char *strpbrk(const char *s, const char *accept)
-{
-    return _strpbrk(s, accept);
-}
-
-char *strpbrk(char *s, const char *accept)
-{
-    return (char *)_strpbrk(s, accept);
-}
-
-static const char *_strstr(const char *haystack, const char *needle)
+char *strstr(const char *haystack, const char *needle)
 {
     for (; *haystack != '\0'; ++haystack)
         if (strcmp(haystack, needle) == 0)
-            return haystack;
+            return (char *)haystack;
 
-    return nullptr;
+    return NULL;
 }
 
-const char *strstr(const char *haystack, const char *needle)
+void *memchr(const void *s, int c, size_t n)
 {
-    return _strstr(haystack, needle);
-}
-
-char *strstr(char *haystack, const char *needle)
-{
-    return (char *)_strstr(haystack, needle);
-}
-
-static const void *_memchr(const void *s, int c, size_t n)
-{
-    const unsigned char *t = (const unsigned char *)s;
+    const unsigned char *t = s;
 
     for (size_t i = 0; i < n; ++i)
         if (t[i] == c)
-            return t+i;
+            return (void *)(t+i);
 
-    return nullptr;
+    return NULL;
 }
 
-const void *memchr(const void *s, int c, size_t n)
+void *memrchr(const void *s, int c, size_t n)
 {
-    return _memchr(s, c, n);
-}
-
-void *memchr(void *s, int c, size_t n)
-{
-    return (void *)_memchr(s, c, n);
-}
-
-static const void *_memrchr(const void *s, int c, size_t n)
-{
-    const unsigned char *t = (const unsigned char *)s;
+    const unsigned char *t = s;
 
     for (size_t i = n; i > 0; --i)
         if (t[i-1] == c)
-            return t+i-1;
+            return (void *)(t+i-1);
 
-    return nullptr;
+    return NULL;
 }
 
-const void *memrchr(const void *s, int c, size_t n)
+void *rawmemchr(const void *s, int c)
 {
-    return _memrchr(s, c, n);
-}
-
-void *memrchr(void *s, int c, size_t n)
-{
-    return (void *)_memrchr(s, c, n);
-}
-
-static const void *_rawmemchr(const void *s, int c)
-{
-    const unsigned char *t = (const unsigned char *)s;
+    const unsigned char *t = s;
 
     while (*t != c)
         ++t;
 
-    return t;
-}
-
-const void *rawmemchr(const void *s, int c)
-{
-    return _rawmemchr(s, c);
-}
-
-void *rawmemchr(void *s, int c)
-{
-    return (void *)_rawmemchr(s, c);
+    return (void *)t;
 }
 
 int memcmp(const void *s1, const void *s2, size_t n)
 {
-    const unsigned char *t1 = (const unsigned char *)s1;
-    const unsigned char *t2 = (const unsigned char *)s2;
+    const unsigned char *t1 = s1;
+    const unsigned char *t2 = s2;
 
     for (size_t i = 0; i < n; ++i) {
         if (t1[i] > t2[i])
@@ -310,7 +230,7 @@ int memcmp(const void *s1, const void *s2, size_t n)
 
 void *memset(void *s, int c, size_t n)
 {
-    unsigned char *t = (unsigned char *)s;
+    unsigned char *t = s;
 
     for (size_t i = 0; i < n; ++i)
         t[i] = c;
@@ -318,10 +238,10 @@ void *memset(void *s, int c, size_t n)
     return s;
 }
 
-void *memcpy(void *__restrict__ dest, const void *__restrict__ src, size_t n)
+void *memcpy(void *restrict dest, const void *restrict src, size_t n)
 {
-    unsigned char *t1 = (unsigned char *)dest;
-    const unsigned char *t2 = (const unsigned char *)src;
+    unsigned char *t1 = dest;
+    const unsigned char *t2 = src;
 
     for (size_t i = 0; i < n; ++i)
         t1[i] = t2[i];

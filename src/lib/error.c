@@ -15,47 +15,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <lib/math.h>
 #include <lib/error.h>
 
-int pow(int x, unsigned int y, Errno &err)
+static const char *error_code_to_string_array[] = {
+    [SUCCESS] = "Success",
+    [EINVAL] = "Invalid",
+    [ERANGE] = "Range error"
+};
+
+const char *error_code_to_string(error_code_t error_code)
 {
-    if (y == 0)
-        return 1;
-
-    int a = x;
-    for (unsigned int i = 1; i < y; ++i) {
-        if (multiply_would_overflow(a, x, INT_MAX)) {
-            err = Errno::ERANGE;
-            return INT_MAX;
-        }
-        if (multiply_would_underflow(a, x, INT_MIN)) {
-            err = Errno::ERANGE;
-            return INT_MIN;
-        }
-
-        a *= x;
-    }
-
-    return a;
-}
-
-int abs(int i)
-{
-    return i < 0 ? -i : i;
-}
-
-long labs(long i)
-{
-    return i < 0 ? -i : i;
-}
-
-long long llabs(long long i)
-{
-    return i < 0 ? -i : i;
-}
-
-intmax_t imaxabs(intmax_t i)
-{
-    return i < 0 ? -i : i;
+    return error_code_to_string_array[error_code];
 }

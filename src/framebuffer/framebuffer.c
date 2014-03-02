@@ -19,8 +19,6 @@
 #include <font/font.h>
 #include <lib/string.h>
 
-namespace Framebuffer {
-
 // Framebuffer start address
 static uint32_t *base_address;
 
@@ -38,12 +36,12 @@ static unsigned int current_width;
 static unsigned int current_height;
 
 // Our glyphs (defined in font/font.cpp) are all 8x16.
-static constexpr unsigned int glyph_width = 8;
-static constexpr unsigned int glyph_height = 16;
+#define GLYPH_WIDTH 8
+#define GLYPH_HEIGHT 16
 
 static uint32_t color_array[NAVY+1] = { };
 
-void init(const EFI_GRAPHICS_OUTPUT_PROTOCOL *gop)
+void framebuffer_init(const EFI_GRAPHICS_OUTPUT_PROTOCOL *gop)
 {
     base_address = (uint32_t *)gop->Mode->FrameBufferBase;
     size = gop->Mode->FrameBufferSize;
@@ -99,27 +97,30 @@ void init(const EFI_GRAPHICS_OUTPUT_PROTOCOL *gop)
 static void scroll()
 {
     for (unsigned int i = 0; i < max_height-1; ++i)
-        memcpy(&base_address[i*pixels_per_scan_line], &base_address[(i+1)*pixels_per_scan_line], max_width*4);
-    memset(&base_address[(max_height-1) * pixels_per_scan_line], 0x00, max_width*4*4);
+        memcpy(&base_address[i*pixels_per_scan_line],
+                &base_address[(i+1)*pixels_per_scan_line], max_width*4);
+    memset(&base_address[(max_height-1) * pixels_per_scan_line], 0x00,
+            max_width*4*4);
 }
 
 static void newline()
 {
     current_width = 0;
 
-    if (current_height + glyph_height > max_height) {
+    if (current_height + GLYPH_HEIGHT > max_height) {
         scroll();
         current_height = max_height-1;
     } else
-        current_height += glyph_height;
+        current_height += GLYPH_HEIGHT;
 }
 
-static void put_glyph(const Font::Glyph *glyph, Color fg, Color bg)
+static void put_glyph(const struct font_glyph *glyph, framebuffer_color_t fg,
+                      framebuffer_color_t bg)
 {
-    for (unsigned int i = 0; i < glyph_height; ++i) {
+    for (unsigned int i = 0; i < GLYPH_HEIGHT; ++i) {
         int height = current_height + i;
 
-        for (unsigned int j = 0; j < glyph_width; ++j) {
+        for (unsigned int j = 0; j < GLYPH_WIDTH; ++j) {
             int width = current_width + j;
 
             if (glyph->data[i] & (0x80 >> j))
@@ -130,7 +131,8 @@ static void put_glyph(const Font::Glyph *glyph, Color fg, Color bg)
     }
 }
 
-int put_string(const char *s, Color fg, Color bg)
+int framebuffer_put_string(const char *s, framebuffer_color_t fg,
+                           framebuffer_color_t bg)
 {
     for (; *s != '\0'; ++s) {
         if (*s == '\n') {
@@ -138,24 +140,17 @@ int put_string(const char *s, Color fg, Color bg)
             continue;
         }
 
-        if (current_width + glyph_width > max_width)
+        if (current_width + GLYPH_WIDTH > max_width)
             newline();
 
-        const Font::Glyph *glyph = Font::get_glyph(*s);
-        if (glyph == nullptr)
+        const struct font_glyph *glyph = font_get_glyph(*s);
+        if (glyph == NULL)
             return -1;
 
         put_glyph(glyph, fg, bg);
 
-        current_width += glyph_width;
+        current_width += GLYPH_WIDTH;
     }
 
     return 0;
-}
-
-int put_string(const char *s)
-{
-    return put_string(s, WHITE, BLACK);
-}
-
 }

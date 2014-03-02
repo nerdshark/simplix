@@ -17,15 +17,13 @@
 
 #pragma once
 
-#include <cstdint>
-
-namespace Font {
+#include <stdint.h>
 
 /*
  * Each glyph in the framebuffer is 8x16 pixels.
  * We store 1 glyph as 16 bytes, where each set bit indicates a pixel to draw.
  */
-struct Glyph {
+struct font_glyph {
     uint8_t data[16];
 };
 
@@ -33,6 +31,4 @@ struct Glyph {
  * Either returns a non-nullptr pointer to a read-only struct Glyph if c is
  * valid (>0), or nullptr otherwise.
  */
-const Glyph *get_glyph(char c);
-
-}
+const struct font_glyph *font_get_glyph(char c);

@@ -19,19 +19,19 @@
 #include <lib/math.h>
 #include <framebuffer/framebuffer.h>
 
-enum CaseSensitivity {
+typedef enum {
     UPPERCASE,
     LOWERCASE
-};
+} case_sensitivity_t;
 
-static int digit_to_char(int x, CaseSensitivity case_sensitivity);
+static int digit_to_char(int x, case_sensitivity_t case_sensitivity);
 static void *mem_reverse_inplace(void *s, size_t size);
 static int signed_num_to_str(char *str, size_t size, intmax_t x, int base,
-                             CaseSensitivity case_sensitivity);
+                             case_sensitivity_t case_sensitivity);
 static int unsigned_num_to_str(char *str, size_t size, uintmax_t x, int base,
-                               CaseSensitivity case_sensitivity);
+                               case_sensitivity_t case_sensitivity);
 
-int vprintf(const char *__restrict__ format, va_list ap)
+int vprintf(const char *restrict format, va_list ap)
 {
     // You may ask yourself: why 3920???
     // answer: that's the amount I can allocate here without causing
@@ -43,11 +43,11 @@ int vprintf(const char *__restrict__ format, va_list ap)
     int ret = vsnprintf(buf, sizeof(buf), format, ap);
     if (ret == -1)
         return -1;
-    ret = Framebuffer::put_string(buf);
+    ret = framebuffer_put_string(buf, WHITE, BLACK);
     return ret;
 }
 
-int printf(const char *__restrict__ format, ...)
+int printf(const char *restrict format, ...)
 {
     va_list ap;
     va_start(ap, format);
@@ -56,7 +56,7 @@ int printf(const char *__restrict__ format, ...)
     return ret;
 }
 
-int sprintf(char *__restrict__ str, const char *__restrict__ format, ...)
+int sprintf(char *restrict str, const char *restrict format, ...)
 {
     va_list ap;
     va_start(ap, format);
@@ -65,8 +65,8 @@ int sprintf(char *__restrict__ str, const char *__restrict__ format, ...)
     return ret;
 }
 
-int snprintf(char *__restrict__ str, size_t size,
-             const char *__restrict__ format, ...)
+int snprintf(char *restrict str, size_t size,
+             const char *restrict format, ...)
 {
     va_list ap;
     va_start(ap, format);
@@ -75,13 +75,13 @@ int snprintf(char *__restrict__ str, size_t size,
     return ret;
 }
 
-int vsprintf(char *__restrict__ str, const char *__restrict__ format, va_list ap)
+int vsprintf(char *restrict str, const char *restrict format, va_list ap)
 {
     return vsnprintf(str, INT_MAX, format, ap);
 }
 
-int vsnprintf(char *__restrict__ str, size_t size,
-              const char *__restrict__ format, va_list ap)
+int vsnprintf(char *restrict str, size_t size,
+              const char *restrict format, va_list ap)
 {
     int cnt = 0;
 
@@ -108,7 +108,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
                     ++format;
                     signed char val = va_arg(ap, int);
                     int ret = signed_num_to_str(str+cnt, size-cnt, val, 10, LOWERCASE);
-                    if (ret == -1 || add_would_overflow(cnt, ret, INT_MAX))
+                    if (ret == -1 || ADD_WOULD_OVERFLOW(cnt, ret, INT_MAX))
                         return -1;
                     cnt += ret; }
                     break;
@@ -116,7 +116,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
                     ++format;
                     unsigned char val = va_arg(ap, int);
                     int ret = unsigned_num_to_str(str+cnt, size-cnt, val, 8, LOWERCASE);
-                    if (ret == -1 || add_would_overflow(cnt, ret, INT_MAX))
+                    if (ret == -1 || ADD_WOULD_OVERFLOW(cnt, ret, INT_MAX))
                         return -1;
                     cnt += ret; }
                     break;
@@ -124,7 +124,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
                     ++format;
                     unsigned char val = va_arg(ap, int);
                     int ret = unsigned_num_to_str(str+cnt, size-cnt, val, 10, LOWERCASE);
-                    if (ret == -1 || add_would_overflow(ret, cnt, INT_MAX))
+                    if (ret == -1 || ADD_WOULD_OVERFLOW(ret, cnt, INT_MAX))
                         return -1;
                     cnt += ret; }
                     break;
@@ -132,7 +132,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
                     ++format;
                     unsigned char val = va_arg(ap, int);
                     int ret = unsigned_num_to_str(str+cnt, size-cnt, val, 16, LOWERCASE);
-                    if (ret == -1 || add_would_overflow(cnt, ret, INT_MAX))
+                    if (ret == -1 || ADD_WOULD_OVERFLOW(cnt, ret, INT_MAX))
                         return -1;
                     cnt += ret; }
                     break;
@@ -140,7 +140,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
                     ++format;
                     unsigned char val = va_arg(ap, int);
                     int ret = unsigned_num_to_str(str+cnt, size-cnt, val, 16, UPPERCASE);
-                    if (ret == -1 || add_would_overflow(cnt, ret, INT_MAX))
+                    if (ret == -1 || ADD_WOULD_OVERFLOW(cnt, ret, INT_MAX))
                         return -1;
                     cnt += ret; }
                     break;
@@ -155,7 +155,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
                     ++format;
                     signed short val = va_arg(ap, int);
                     int ret = signed_num_to_str(str+cnt, size-cnt, val, 10, LOWERCASE);
-                    if (ret == -1 || add_would_overflow(cnt, ret, INT_MAX))
+                    if (ret == -1 || ADD_WOULD_OVERFLOW(cnt, ret, INT_MAX))
                         return -1;
                     cnt += ret; }
                     break;
@@ -163,7 +163,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
                     ++format;
                     unsigned short val = va_arg(ap, int);
                     int ret = unsigned_num_to_str(str+cnt, size-cnt, val, 8, LOWERCASE);
-                    if (ret == -1 || add_would_overflow(cnt, ret, INT_MAX))
+                    if (ret == -1 || ADD_WOULD_OVERFLOW(cnt, ret, INT_MAX))
                         return -1;
                     cnt += ret; }
                     break;
@@ -171,7 +171,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
                     ++format;
                     unsigned short val = va_arg(ap, int);
                     int ret = unsigned_num_to_str(str+cnt, size-cnt, val, 10, LOWERCASE);
-                    if (ret == -1 || add_would_overflow(ret, cnt, INT_MAX))
+                    if (ret == -1 || ADD_WOULD_OVERFLOW(ret, cnt, INT_MAX))
                         return -1;
                     cnt += ret; }
                     break;
@@ -179,7 +179,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
                     ++format;
                     unsigned short val = va_arg(ap, int);
                     int ret = unsigned_num_to_str(str+cnt, size-cnt, val, 16, LOWERCASE);
-                    if (ret == -1 || add_would_overflow(cnt, ret, INT_MAX))
+                    if (ret == -1 || ADD_WOULD_OVERFLOW(cnt, ret, INT_MAX))
                         return -1;
                     cnt += ret; }
                     break;
@@ -187,7 +187,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
                     ++format;
                     unsigned short val = va_arg(ap, int);
                     int ret = unsigned_num_to_str(str+cnt, size-cnt, val, 16, UPPERCASE);
-                    if (ret == -1 || add_would_overflow(cnt, ret, INT_MAX))
+                    if (ret == -1 || ADD_WOULD_OVERFLOW(cnt, ret, INT_MAX))
                         return -1;
                     cnt += ret; }
                     break;
@@ -208,7 +208,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
                     ++format;
                     long long val = va_arg(ap, long long);
                     int ret = signed_num_to_str(str+cnt, size-cnt, val, 10, LOWERCASE);
-                    if (ret == -1 || add_would_overflow(cnt, ret, INT_MAX))
+                    if (ret == -1 || ADD_WOULD_OVERFLOW(cnt, ret, INT_MAX))
                         return -1;
                     cnt += ret; }
                     break;
@@ -216,7 +216,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
                     ++format;
                     unsigned long long val = va_arg(ap, unsigned long long);
                     int ret = unsigned_num_to_str(str+cnt, size-cnt, val, 8, LOWERCASE);
-                    if (ret == -1 || add_would_overflow(cnt, ret, INT_MAX))
+                    if (ret == -1 || ADD_WOULD_OVERFLOW(cnt, ret, INT_MAX))
                         return -1;
                     cnt += ret; }
                     break;
@@ -224,7 +224,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
                     ++format;
                     unsigned long long val = va_arg(ap, unsigned long long);
                     int ret = unsigned_num_to_str(str+cnt, size-cnt, val, 10, LOWERCASE);
-                    if (ret == -1 || add_would_overflow(ret, cnt, INT_MAX))
+                    if (ret == -1 || ADD_WOULD_OVERFLOW(ret, cnt, INT_MAX))
                         return -1;
                     cnt += ret; }
                     break;
@@ -232,7 +232,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
                     ++format;
                     unsigned long long val = va_arg(ap, unsigned long long);
                     int ret = unsigned_num_to_str(str+cnt, size-cnt, val, 16, LOWERCASE);
-                    if (ret == -1 || add_would_overflow(cnt, ret, INT_MAX))
+                    if (ret == -1 || ADD_WOULD_OVERFLOW(cnt, ret, INT_MAX))
                         return -1;
                     cnt += ret;
                     break; }
@@ -240,7 +240,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
                     ++format;
                     unsigned long long val = va_arg(ap, unsigned long long);
                     int ret = unsigned_num_to_str(str+cnt, size-cnt, val, 16, UPPERCASE);
-                    if (ret == -1 || add_would_overflow(cnt, ret, INT_MAX))
+                    if (ret == -1 || ADD_WOULD_OVERFLOW(cnt, ret, INT_MAX))
                         return -1;
                     cnt += ret; }
                     break;
@@ -255,7 +255,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
                     ++format;
                     long val = va_arg(ap, long);
                     int ret = signed_num_to_str(str+cnt, size-cnt, val, 10, LOWERCASE);
-                    if (ret == -1 || add_would_overflow(cnt, ret, INT_MAX))
+                    if (ret == -1 || ADD_WOULD_OVERFLOW(cnt, ret, INT_MAX))
                         return -1;
                     cnt += ret; }
                     break;
@@ -263,7 +263,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
                     ++format;
                     unsigned long val = va_arg(ap, unsigned long);
                     int ret = unsigned_num_to_str(str+cnt, size-cnt, val, 8, LOWERCASE);
-                    if (ret == -1 || add_would_overflow(cnt, ret, INT_MAX))
+                    if (ret == -1 || ADD_WOULD_OVERFLOW(cnt, ret, INT_MAX))
                         return -1;
                     cnt += ret; }
                     break;
@@ -271,7 +271,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
                     ++format;
                     unsigned long val = va_arg(ap, unsigned long);
                     int ret = unsigned_num_to_str(str+cnt, size-cnt, val, 10, LOWERCASE);
-                    if (ret == -1 || add_would_overflow(ret, cnt, INT_MAX))
+                    if (ret == -1 || ADD_WOULD_OVERFLOW(ret, cnt, INT_MAX))
                         return -1;
                     cnt += ret; }
                     break;
@@ -279,7 +279,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
                     ++format;
                     unsigned long val = va_arg(ap, unsigned long);
                     int ret = unsigned_num_to_str(str+cnt, size-cnt, val, 16, LOWERCASE);
-                    if (ret == -1 || add_would_overflow(cnt, ret, INT_MAX))
+                    if (ret == -1 || ADD_WOULD_OVERFLOW(cnt, ret, INT_MAX))
                         return -1;
                     cnt += ret; }
                     break;
@@ -287,7 +287,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
                     ++format;
                     unsigned long val = va_arg(ap, unsigned long);
                     int ret = unsigned_num_to_str(str+cnt, size-cnt, val, 16, UPPERCASE);
-                    if (ret == -1 || add_would_overflow(cnt, ret, INT_MAX))
+                    if (ret == -1 || ADD_WOULD_OVERFLOW(cnt, ret, INT_MAX))
                         return -1;
                     cnt += ret; }
                     break;
@@ -306,7 +306,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
                 ++format;
                 intmax_t val = va_arg(ap, intmax_t);
                 int ret = signed_num_to_str(str+cnt, size-cnt, val, 10, LOWERCASE);
-                if (ret == -1 || add_would_overflow(cnt, ret, INT_MAX))
+                if (ret == -1 || ADD_WOULD_OVERFLOW(cnt, ret, INT_MAX))
                     return -1;
                 cnt += ret; }
                 break;
@@ -314,7 +314,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
                 ++format;
                 uintmax_t val = va_arg(ap, uintmax_t);
                 int ret = unsigned_num_to_str(str+cnt, size-cnt, val, 8, LOWERCASE);
-                if (ret == -1 || add_would_overflow(cnt, ret, INT_MAX))
+                if (ret == -1 || ADD_WOULD_OVERFLOW(cnt, ret, INT_MAX))
                     return -1;
                 cnt += ret; }
                 break;
@@ -322,7 +322,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
                 ++format;
                 uintmax_t val = va_arg(ap, uintmax_t);
                 int ret = unsigned_num_to_str(str+cnt, size-cnt, val, 10, LOWERCASE);
-                if (ret == -1 || add_would_overflow(ret, cnt, INT_MAX))
+                if (ret == -1 || ADD_WOULD_OVERFLOW(ret, cnt, INT_MAX))
                     return -1;
                 cnt += ret; }
                 break;
@@ -330,7 +330,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
                 ++format;
                 uintmax_t val = va_arg(ap, uintmax_t);
                 int ret = unsigned_num_to_str(str+cnt, size-cnt, val, 16, LOWERCASE);
-                if (ret == -1 || add_would_overflow(cnt, ret, INT_MAX))
+                if (ret == -1 || ADD_WOULD_OVERFLOW(cnt, ret, INT_MAX))
                     return -1;
                 cnt += ret; }
                 break;
@@ -338,7 +338,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
                 ++format;
                 uintmax_t val = va_arg(ap, uintmax_t);
                 int ret = unsigned_num_to_str(str+cnt, size-cnt, val, 16, UPPERCASE);
-                if (ret == -1 || add_would_overflow(cnt, ret, INT_MAX))
+                if (ret == -1 || ADD_WOULD_OVERFLOW(cnt, ret, INT_MAX))
                     return -1;
                 cnt += ret; }
                 break;
@@ -353,7 +353,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
                 ++format;
                 size_t val = va_arg(ap, size_t);
                 int ret = unsigned_num_to_str(str+cnt, size-cnt, val, 8, LOWERCASE);
-                if (ret == -1 || add_would_overflow(cnt, ret, INT_MAX))
+                if (ret == -1 || ADD_WOULD_OVERFLOW(cnt, ret, INT_MAX))
                     return -1;
                 cnt += ret; }
                 break;
@@ -361,7 +361,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
                 ++format;
                 size_t val = va_arg(ap, size_t);
                 int ret = unsigned_num_to_str(str+cnt, size-cnt, val, 10, LOWERCASE);
-                if (ret == -1 || add_would_overflow(ret, cnt, INT_MAX))
+                if (ret == -1 || ADD_WOULD_OVERFLOW(ret, cnt, INT_MAX))
                     return -1;
                 cnt += ret; }
                 break;
@@ -369,7 +369,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
                 ++format;
                 size_t val = va_arg(ap, size_t);
                 int ret = unsigned_num_to_str(str+cnt, size-cnt, val, 16, LOWERCASE);
-                if (ret == -1 || add_would_overflow(cnt, ret, INT_MAX))
+                if (ret == -1 || ADD_WOULD_OVERFLOW(cnt, ret, INT_MAX))
                     return -1;
                 cnt += ret; }
                 break;
@@ -377,7 +377,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
                 ++format;
                 size_t val = va_arg(ap, size_t);
                 int ret = unsigned_num_to_str(str+cnt, size-cnt, val, 16, UPPERCASE);
-                if (ret == -1 || add_would_overflow(cnt, ret, INT_MAX))
+                if (ret == -1 || ADD_WOULD_OVERFLOW(cnt, ret, INT_MAX))
                     return -1;
                 cnt += ret; }
                 break;
@@ -393,7 +393,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
                 ++format;
                 ptrdiff_t val = va_arg(ap, ptrdiff_t);
                 int ret = signed_num_to_str(str+cnt, size-cnt, val, 10, LOWERCASE);
-                if (ret == -1 || add_would_overflow(cnt, ret, INT_MAX))
+                if (ret == -1 || ADD_WOULD_OVERFLOW(cnt, ret, INT_MAX))
                     return -1;
                 cnt += ret; }
                 break;
@@ -406,7 +406,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
             ++format;
             int val = va_arg(ap, int);
             int ret = signed_num_to_str(str+cnt, size-cnt, val, 10, LOWERCASE);
-            if (ret == -1 || add_would_overflow(cnt, ret, INT_MAX))
+            if (ret == -1 || ADD_WOULD_OVERFLOW(cnt, ret, INT_MAX))
                 return -1;
             cnt += ret; }
             break;
@@ -414,7 +414,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
             ++format;
             unsigned val = va_arg(ap, unsigned);
             int ret = unsigned_num_to_str(str+cnt, size-cnt, val, 8, LOWERCASE);
-            if (ret == -1 || add_would_overflow(cnt, ret, INT_MAX))
+            if (ret == -1 || ADD_WOULD_OVERFLOW(cnt, ret, INT_MAX))
                 return -1;
             cnt += ret; }
             break;
@@ -422,7 +422,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
             ++format;
             unsigned val = va_arg(ap, unsigned);
             int ret = unsigned_num_to_str(str+cnt, size-cnt, val, 10, LOWERCASE);
-            if (ret == -1 || add_would_overflow(cnt, ret, INT_MAX))
+            if (ret == -1 || ADD_WOULD_OVERFLOW(cnt, ret, INT_MAX))
                 return -1;
             cnt += ret; }
             break;
@@ -430,7 +430,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
             ++format;
             unsigned val = va_arg(ap, unsigned);
             int ret = unsigned_num_to_str(str+cnt, size-cnt, val, 16, LOWERCASE);
-            if (ret == -1 || add_would_overflow(cnt, ret, INT_MAX))
+            if (ret == -1 || ADD_WOULD_OVERFLOW(cnt, ret, INT_MAX))
                 return -1;
             cnt += ret; }
             break;
@@ -438,7 +438,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
             ++format;
             unsigned val = va_arg(ap, unsigned);
             int ret = unsigned_num_to_str(str+cnt, size-cnt, val, 16, UPPERCASE);
-            if (ret == -1 || add_would_overflow(cnt, ret, INT_MAX))
+            if (ret == -1 || ADD_WOULD_OVERFLOW(cnt, ret, INT_MAX))
                 return -1;
             cnt += ret; }
             break;
@@ -462,7 +462,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
             ++format;
             void *val = va_arg(ap, void *);
             int ret = unsigned_num_to_str(str+cnt, size-cnt, (uintmax_t)val, 16, LOWERCASE);
-            if (ret == -1 || add_would_overflow(cnt, ret, INT_MAX))
+            if (ret == -1 || ADD_WOULD_OVERFLOW(cnt, ret, INT_MAX))
                 return -1;
             cnt += ret; }
             break;
@@ -484,7 +484,7 @@ int vsnprintf(char *__restrict__ str, size_t size,
 }
 
 int signed_num_to_str(char *str, size_t size, intmax_t x, int base,
-                      CaseSensitivity case_sensitivity)
+                      case_sensitivity_t case_sensitivity)
 {
     int cnt = 0;
 
@@ -494,17 +494,17 @@ int signed_num_to_str(char *str, size_t size, intmax_t x, int base,
         ++cnt;
     }
 
-    uintmax_t abs_arg = unsigned_abs(x);
+    uintmax_t abs_arg = x < 0 ? -x : x;
 
     int ret = unsigned_num_to_str(str+cnt, size-cnt, abs_arg, base, case_sensitivity);
-    if (ret == -1 || add_would_overflow(ret, cnt, INT_MAX))
+    if (ret == -1 || ADD_WOULD_OVERFLOW(ret, cnt, INT_MAX))
         return -1;
 
     return cnt + ret;
 }
 
 int unsigned_num_to_str(char *str, size_t size, uintmax_t x, int base,
-                        CaseSensitivity case_sensitivity)
+                        case_sensitivity_t case_sensitivity)
 {
     int cnt = 0;
 
@@ -524,7 +524,7 @@ int unsigned_num_to_str(char *str, size_t size, uintmax_t x, int base,
     return cnt;
 }
 
-int digit_to_char(int x, CaseSensitivity case_sensitivity)
+int digit_to_char(int x, case_sensitivity_t case_sensitivity)
 {
     if (x >= 0 && x <= 9)
         return x + '0';
