@@ -23,8 +23,8 @@ inline void cpuid(uint32_t eax_in, uint32_t ecx_in, uint32_t *restrict eax_out,
                   uint32_t *restrict ebx_out, uint32_t *restrict ecx_out,
                   uint32_t *restrict edx_out)
 {
-    __asm__ volatile ("cpuid" : "=a"(*eax_out), "=b"(*ebx_out), "=c"(*ecx_out),
-                      "=d"(*edx_out) : "a"(eax_in), "c"(ecx_in));
+    __asm volatile ("cpuid" : "=a"(*eax_out), "=b"(*ebx_out), "=c"(*ecx_out),
+                    "=d"(*edx_out) : "a"(eax_in), "c"(ecx_in));
 }
 
 // @buf needs to be at least 13 bytes large

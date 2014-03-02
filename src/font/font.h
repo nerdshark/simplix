@@ -29,6 +29,6 @@ struct font_glyph {
 
 /*
  * Either returns a non-nullptr pointer to a read-only struct Glyph if c is
- * valid (>0), or nullptr otherwise.
+ * valid (>0), or NULL otherwise.
  */
 const struct font_glyph *font_get_glyph(char c);
