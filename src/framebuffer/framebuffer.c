@@ -39,7 +39,7 @@ static unsigned int current_height;
 #define GLYPH_WIDTH 8
 #define GLYPH_HEIGHT 16
 
-static uint32_t color_array[NAVY+1] = { };
+static uint32_t color_array[FRAMEBUFFER_NAVY+1] = { };
 
 void framebuffer_init(const EFI_GRAPHICS_OUTPUT_PROTOCOL *gop)
 {
@@ -53,40 +53,40 @@ void framebuffer_init(const EFI_GRAPHICS_OUTPUT_PROTOCOL *gop)
 
     switch (gop->Mode->Info->PixelFormat) {
     case PixelRedGreenBlueReserved8BitPerColor:
-        color_array[BLACK] = 0x00000000;
-        color_array[WHITE] = 0x00ffffff;
-        color_array[RED] = 0x000000ff;
-        color_array[LIME] = 0x0000ff00;
-        color_array[BLUE] = 0x00ff0000;
-        color_array[YELLOW] = 0x0000ffff;
-        color_array[CYAN] = 0x00ffff00;
-        color_array[MAGENTA] = 0x00ff00ff;
-        color_array[SILVER] = 0x00c0c0c0;
-        color_array[GRAY] = 0x00808080;
-        color_array[MAROON] = 0x00000080;
-        color_array[OLIVE] = 0x00008080;
-        color_array[GREEN] = 0x00008000;
-        color_array[PURPLE] = 0x00800080;
-        color_array[TEAL] = 0x00808000;
-        color_array[NAVY] = 0x00800000;
+        color_array[FRAMEBUFFER_BLACK] = 0x00000000;
+        color_array[FRAMEBUFFER_WHITE] = 0x00ffffff;
+        color_array[FRAMEBUFFER_RED] = 0x000000ff;
+        color_array[FRAMEBUFFER_LIME] = 0x0000ff00;
+        color_array[FRAMEBUFFER_BLUE] = 0x00ff0000;
+        color_array[FRAMEBUFFER_YELLOW] = 0x0000ffff;
+        color_array[FRAMEBUFFER_CYAN] = 0x00ffff00;
+        color_array[FRAMEBUFFER_MAGENTA] = 0x00ff00ff;
+        color_array[FRAMEBUFFER_SILVER] = 0x00c0c0c0;
+        color_array[FRAMEBUFFER_GRAY] = 0x00808080;
+        color_array[FRAMEBUFFER_MAROON] = 0x00000080;
+        color_array[FRAMEBUFFER_OLIVE] = 0x00008080;
+        color_array[FRAMEBUFFER_GREEN] = 0x00008000;
+        color_array[FRAMEBUFFER_PURPLE] = 0x00800080;
+        color_array[FRAMEBUFFER_TEAL] = 0x00808000;
+        color_array[FRAMEBUFFER_NAVY] = 0x00800000;
         break;
     case PixelBlueGreenRedReserved8BitPerColor:
-        color_array[BLACK] = 0x00000000;
-        color_array[WHITE] = 0x00ffffff;
-        color_array[RED] = 0x00ff0000;
-        color_array[LIME] = 0x0000ff00;
-        color_array[BLUE] = 0x000000ff;
-        color_array[YELLOW] = 0x00ffff00;
-        color_array[CYAN] = 0x0000ffff;
-        color_array[MAGENTA] = 0x00ff00ff;
-        color_array[SILVER] = 0x00c0c0c0;
-        color_array[GRAY] = 0x00808080;
-        color_array[MAROON] = 0x00800000;
-        color_array[OLIVE] = 0x00808000;
-        color_array[GREEN] = 0x00008000;
-        color_array[PURPLE] = 0x00800080;
-        color_array[TEAL] = 0x00008080;
-        color_array[NAVY] = 0x00000080;
+        color_array[FRAMEBUFFER_BLACK] = 0x00000000;
+        color_array[FRAMEBUFFER_WHITE] = 0x00ffffff;
+        color_array[FRAMEBUFFER_RED] = 0x00ff0000;
+        color_array[FRAMEBUFFER_LIME] = 0x0000ff00;
+        color_array[FRAMEBUFFER_BLUE] = 0x000000ff;
+        color_array[FRAMEBUFFER_YELLOW] = 0x00ffff00;
+        color_array[FRAMEBUFFER_CYAN] = 0x0000ffff;
+        color_array[FRAMEBUFFER_MAGENTA] = 0x00ff00ff;
+        color_array[FRAMEBUFFER_SILVER] = 0x00c0c0c0;
+        color_array[FRAMEBUFFER_GRAY] = 0x00808080;
+        color_array[FRAMEBUFFER_MAROON] = 0x00800000;
+        color_array[FRAMEBUFFER_OLIVE] = 0x00808000;
+        color_array[FRAMEBUFFER_GREEN] = 0x00008000;
+        color_array[FRAMEBUFFER_PURPLE] = 0x00800080;
+        color_array[FRAMEBUFFER_TEAL] = 0x00008080;
+        color_array[FRAMEBUFFER_NAVY] = 0x00000080;
         break;
     default:
         break;

@@ -43,7 +43,7 @@ int vprintf(const char *restrict format, va_list ap)
     int ret = vsnprintf(buf, sizeof(buf), format, ap);
     if (ret == -1)
         return -1;
-    ret = framebuffer_put_string(buf, WHITE, BLACK);
+    ret = framebuffer_put_string(buf, FRAMEBUFFER_WHITE, FRAMEBUFFER_BLACK);
     return ret;
 }
 

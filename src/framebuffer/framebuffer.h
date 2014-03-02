@@ -23,22 +23,22 @@
 
 // We support only the basic colors for now
 typedef enum {
-    BLACK,
-    WHITE,
-    RED,
-    LIME,
-    BLUE,
-    YELLOW,
-    CYAN,
-    MAGENTA,
-    SILVER,
-    GRAY,
-    MAROON,
-    OLIVE,
-    GREEN,
-    PURPLE,
-    TEAL,
-    NAVY
+    FRAMEBUFFER_BLACK,
+    FRAMEBUFFER_WHITE,
+    FRAMEBUFFER_RED,
+    FRAMEBUFFER_LIME,
+    FRAMEBUFFER_BLUE,
+    FRAMEBUFFER_YELLOW,
+    FRAMEBUFFER_CYAN,
+    FRAMEBUFFER_MAGENTA,
+    FRAMEBUFFER_SILVER,
+    FRAMEBUFFER_GRAY,
+    FRAMEBUFFER_MAROON,
+    FRAMEBUFFER_OLIVE,
+    FRAMEBUFFER_GREEN,
+    FRAMEBUFFER_PURPLE,
+    FRAMEBUFFER_TEAL,
+    FRAMEBUFFER_NAVY
 } framebuffer_color_t;
 
 // Call that the first time before doing anything with the framebuffer!
