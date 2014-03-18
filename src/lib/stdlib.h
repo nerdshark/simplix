@@ -21,16 +21,16 @@
 #include <stdint.h>
 #include <lib/error.h>
 
-long strtol(const char *restrict nptr, char **restrict endptr,
-            int base, error_code_t *err);
-long long strtoll(const char *restrict nptr, char **restrict endptr,
-                  int base, error_code_t *err);
-intmax_t strtoimax(const char *restrict nptr, char **restrict endptr,
-                   int base, error_code_t *err);
+long strtol(const char *__restrict nptr, char **__restrict endptr,
+            int base, Error::Error &err);
+long long strtoll(const char *__restrict nptr, char **__restrict endptr,
+                  int base, Error::Error &err);
+intmax_t strtoimax(const char *__restrict nptr, char **__restrict endptr,
+                   int base, Error::Error &err);
 
-unsigned long strtoul(const char *restrict nptr,
-                      char **restrict endptr, int base, error_code_t *err);
-unsigned long long strtoull(const char *restrict nptr,
-                            char **restrict endptr, int base, error_code_t *err);
-uintmax_t strtoumax(const char *restrict nptr, char **restrict endptr,
-                    int base, error_code_t *err);
+unsigned long strtoul(const char *__restrict nptr, char **__restrict endptr,
+                      int base, Error::Error &err);
+unsigned long long strtoull(const char *__restrict nptr, char **__restrict endptr,
+                            int base, Error::Error &err);
+uintmax_t strtoumax(const char *__restrict nptr, char **__restrict endptr,
+                    int base, Error::Error &err);

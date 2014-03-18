@@ -17,10 +17,22 @@
 
 #pragma once
 
-typedef enum {
+namespace Error {
+
+enum Code {
     SUCCESS,
     EINVAL,
     ERANGE
-} error_code_t;
+};
 
-const char *error_code_to_str(error_code_t error_code);
+class Error {
+private:
+    Code code;
+public:
+    Error(Code code) : code(code) { }
+    const char *strerror() const;
+    void set_code(Code c) { code = c; }
+    Code get_code() { return code; }
+};
+
+} // namespace Error end

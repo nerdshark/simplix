@@ -38,7 +38,7 @@ typedef EFI_STATUS (EFIAPI *EFI_IMAGE_UNLOAD)
 (EFI_HANDLE ImageHandle);
 
 typedef EFI_STATUS (EFIAPI *EFI_IMAGE_ENTRY_POINT)
-(EFI_HANDLE ImageHandle, struct EFI_SYSTEM_TABLE *SystemTable);
+(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable);
 
 typedef EFI_STATUS (EFIAPI *EFI_EXIT)
 (EFI_HANDLE ImageHandle, EFI_STATUS ExitStatus, UINTN ExitDataSize,

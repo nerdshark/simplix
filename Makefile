@@ -1,12 +1,12 @@
-VPATH = src:src/lib:src/uefi:src/font:src/framebuffer
+VPATH = src:src/lib:src/uefi:src/font:src/framebuffer:src/descriptors
 OBJECTS = kernel.o error.o string.o ctype.o math.o stdlib.o stdio.o uefi.o \
 	  font.o framebuffer.o
 
-CC = x86_64-w64-mingw32-gcc
+CXX = x86_64-w64-mingw32-g++
 LD = x86_64-w64-mingw32-ld
 
-CFLAGS = -Wall -Wextra -Werror -std=c11 -ffreestanding -fshort-wchar \
-	 -O2 -I src
+CXXFLAGS = -Wall -Wextra -Werror -std=c++11 -ffreestanding -fshort-wchar \
+	   -fno-exceptions -fno-rtti -O2 -I src -ggdb3
 LDFLAGS = -nostdlib --oformat pei-x86-64 --subsystem 10 -pie -e kmain
 
 all: simplix.efi

@@ -17,19 +17,19 @@
 
 #include <lib/math.h>
 
-int pow(int x, unsigned int y, error_code_t *err)
+int pow(int x, unsigned int y, Error::Error &err)
 {
     if (y == 0)
         return 1;
 
     int a = x;
     for (unsigned int i = 1; i < y; ++i) {
-        if (MULTIPLY_WOULD_OVERFLOW(a, x, INT_MAX)) {
-            *err = ERANGE;
+        if (multiply_would_overflow(a, x, INT_MAX)) {
+            err.set_code(Error::Code::ERANGE);
             return INT_MAX;
         }
-        if (MULTIPLY_WOULD_UNDERFLOW(a, x, INT_MIN)) {
-            *err = ERANGE;
+        if (multiply_would_underflow(a, x, INT_MIN)) {
+            err.set_code(Error::Code::ERANGE);
             return INT_MIN;
         }
 

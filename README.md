@@ -1,7 +1,7 @@
 simplix
 =======
 
-A simple x86-64 UEFI operating system written in C.
+A simple x86-64 UEFI operating system written in C++11.
 
 Simplix is an UEFI application. This means that we have to use some implementation of the UEFI API as specified by the
 UEFI specification.  
@@ -15,11 +15,9 @@ Considering all that, I thought it would be easier to just implement the UEFI in
 
 ### How to Build
 The following assumes a x86-64/AMD64 Linux distribution.  
-The only thing required is a working MinGW x86-64 gcc and linker.  
+The only thing required is a working MinGW x86-64 g++ and linker.  
 If your're on Debian/Ubuntu, execute:  
-`sudo apt-get install gcc-mingw-w64-x86-64`  
-For Fedora/RedHat:  
-`sudo yum install mingw64-gcc`  
+`sudo apt-get install mingw-w64`    
 Then, assuming you're in the cloned directory, just do 'make' and a UEFI application called 'simplix.efi' should be in the directory.  
 
 ### How to Test

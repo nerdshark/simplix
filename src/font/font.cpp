@@ -24,8 +24,39 @@
  *
  * Currently, we only support ASCII characters.
  */
-static const struct font_glyph glyph_array[] = {
-    [0 ... 31] = { { } },
+static const Font::Glyph glyph_array[] = {
+    [0] = { { } },
+    [1] = { { } },
+    [2] = { { } },
+    [3] = { { } },
+    [4] = { { } },
+    [5] = { { } },
+    [6] = { { } },
+    [7] = { { } },
+    [8] = { { } },
+    [9] = { { } },
+    [10] = { { } },
+    [11] = { { } },
+    [12] = { { } },
+    [13] = { { } },
+    [14] = { { } },
+    [15] = { { } },
+    [16] = { { } },
+    [17] = { { } },
+    [18] = { { } },
+    [19] = { { } },
+    [20] = { { } },
+    [21] = { { } },
+    [22] = { { } },
+    [23] = { { } },
+    [24] = { { } },
+    [25] = { { } },
+    [26] = { { } },
+    [27] = { { } },
+    [28] = { { } },
+    [29] = { { } },
+    [30] = { { } },
+    [31] = { { } },
     [' '] = { { } }, // space is all-zeroes, obviously
     ['!'] = {{ 0b00000000,
                0b00000000,
@@ -1531,7 +1562,7 @@ static const struct font_glyph glyph_array[] = {
     [127] = { { } }
 };
 
-const struct font_glyph *font_get_glyph(char c)
+const Font::Glyph *Font::get_glyph(char c)
 {
     if (c < 0) // char is never > 127
         return NULL;

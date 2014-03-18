@@ -55,24 +55,24 @@ static const CHAR16 *status_array[] = {
     [EFI_ERROR_TO_NORM(EFI_IP_ADDRESS_CONFLICT)] = L"IP address conflict"
 };
 
-const CHAR16 *uefi_error_to_string(EFI_STATUS status)
+const CHAR16 *UEFI::error_to_string(EFI_STATUS status)
 {
     return status_array[EFI_ERROR_TO_NORM(status)];
 }
 
-void uefi_die(const EFI_SYSTEM_TABLE *systab, EFI_STATUS status, const CHAR16 *msg)
+void UEFI::die(const EFI_SYSTEM_TABLE &systab, EFI_STATUS status, const CHAR16 *msg)
 {
-    uefi_print(systab->ConOut, msg);
-    uefi_print(systab->ConOut, L": ");
-    uefi_print(systab->ConOut, uefi_error_to_string(status));
-    uefi_print(systab->ConOut, L"\r\n");
-    __asm__ volatile ("cli \n\t hlt");
+    UEFI::print(systab, msg);
+    UEFI::print(systab, L": ");
+    UEFI::print(systab, UEFI::error_to_string(status));
+    UEFI::print(systab, L"\r\n");
+    __asm volatile ("cli \n\t hlt");
 }
 
-EFI_GRAPHICS_OUTPUT_PROTOCOL *uefi_get_gop(EFI_HANDLE handle,
-                                           const EFI_SYSTEM_TABLE *systab)
+EFI_GRAPHICS_OUTPUT_PROTOCOL *UEFI::get_gop(EFI_HANDLE handle,
+                                            const EFI_SYSTEM_TABLE &systab)
 {
-    EFI_BOOT_SERVICES *bs = systab->BootServices;
+    EFI_BOOT_SERVICES *bs = systab.BootServices;
 
     EFI_GUID gop_guid = EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID;
 
@@ -82,7 +82,7 @@ EFI_GRAPHICS_OUTPUT_PROTOCOL *uefi_get_gop(EFI_HANDLE handle,
     EFI_STATUS status = bs->LocateHandleBuffer(ByProtocol, &gop_guid, NULL,
                                                &num, &handles);
     if (EFI_STATUS_IS_ERROR(status))
-        uefi_die(systab, status, L"LocateHandleBuffer");
+        UEFI::die(systab, status, L"LocateHandleBuffer");
 
     EFI_GRAPHICS_OUTPUT_PROTOCOL *gop;
 
@@ -90,7 +90,7 @@ EFI_GRAPHICS_OUTPUT_PROTOCOL *uefi_get_gop(EFI_HANDLE handle,
         status = bs->OpenProtocol(handles[i], &gop_guid, (VOID **)&gop, handle,
                                   NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
         if (EFI_STATUS_IS_ERROR(status))
-            uefi_die(systab, status, L"OpenProtocol");
+            UEFI::die(systab, status, L"OpenProtocol");
 
         if (gop->Mode->Info->PixelFormat != PixelBltOnly &&
             gop->Mode->Info->PixelFormat != PixelBitMask)
@@ -100,28 +100,28 @@ EFI_GRAPHICS_OUTPUT_PROTOCOL *uefi_get_gop(EFI_HANDLE handle,
     return NULL;
 }
 
-void uefi_get_memory_map(const EFI_SYSTEM_TABLE *systab, struct uefi_memory_map *map)
+void UEFI::get_memory_map(const EFI_SYSTEM_TABLE &systab, UEFI::MemoryMap &map)
 {
-    EFI_BOOT_SERVICES *bs = systab->BootServices;
+    EFI_BOOT_SERVICES *bs = systab.BootServices;
 
-    map->memory_map_size = 0;
-    EFI_STATUS status = bs->GetMemoryMap(&map->memory_map_size, map->memory_map,
-                                         &map->map_key, &map->descriptor_size,
-                                         &map->descriptor_version);
+    map.memory_map_size = 0;
+    EFI_STATUS status = bs->GetMemoryMap(&map.memory_map_size, map.memory_map,
+                                         &map.map_key, &map.descriptor_size,
+                                         &map.descriptor_version);
     if (EFI_STATUS_IS_ERROR(status) && status != EFI_BUFFER_TOO_SMALL)
-        uefi_die(systab, status, L"GetMemoryMap");
+        UEFI::die(systab, status, L"GetMemoryMap");
 
     do {
-        map->memory_map_size *= 2;
-        status = bs->AllocatePool(EfiLoaderData, map->memory_map_size,
-                                  (VOID **)&map->memory_map);
+        map.memory_map_size *= 2;
+        status = bs->AllocatePool(EfiLoaderData, map.memory_map_size,
+                                  (VOID **)&map.memory_map);
         if (EFI_STATUS_IS_ERROR(status))
-            uefi_die(systab, status, L"AllocatePool");
+            UEFI::die(systab, status, L"AllocatePool");
 
-        status = bs->GetMemoryMap(&map->memory_map_size, map->memory_map,
-                                  &map->map_key, &map->descriptor_size,
-                                  &map->descriptor_version);
+        status = bs->GetMemoryMap(&map.memory_map_size, map.memory_map,
+                                  &map.map_key, &map.descriptor_size,
+                                  &map.descriptor_version);
         if (EFI_STATUS_IS_ERROR(status) && status != EFI_BUFFER_TOO_SMALL)
-            uefi_die(systab, status, L"GetMemoryMap");
+            UEFI::die(systab, status, L"GetMemoryMap");
     } while (status == EFI_BUFFER_TOO_SMALL);
 }

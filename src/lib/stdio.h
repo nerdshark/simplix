@@ -17,8 +17,8 @@
 
 #pragma once
 
-#include <stdarg.h>
-#include <stddef.h>
+#include <cstdarg>
+#include <cstddef>
 
 /*
  * These functions work just like their std counterpart.
@@ -32,20 +32,20 @@
  * so do not call printf before the framebuffer is initialized!
  */
 
-int vprintf(const char *restrict format, va_list ap)
+int vprintf(const char *__restrict format, va_list ap)
 __attribute((format(printf, 1, 0)));
 
-int vsprintf(char *restrict str, const char *restrict format, va_list ap)
+int vsprintf(char *__restrict str, const char *__restrict format, va_list ap)
 __attribute((format(printf, 2, 0)));
 
-int vsnprintf(char *restrict str, size_t size, const char *restrict format, va_list ap)
+int vsnprintf(char *__restrict str, size_t size, const char *__restrict format, va_list ap)
 __attribute((format(printf, 3, 0)));
 
-int printf(const char *restrict format, ...)
+int printf(const char *__restrict format, ...)
 __attribute((format(printf, 1, 2)));
 
-int sprintf(char *restrict str, const char *restrict format, ...)
+int sprintf(char *__restrict str, const char *__restrict format, ...)
 __attribute((format(printf, 2, 3)));
 
-int snprintf(char *restrict str, size_t size, const char *restrict format, ...)
+int snprintf(char *__restrict str, size_t size, const char *__restrict format, ...)
 __attribute((format(printf, 3, 4)));

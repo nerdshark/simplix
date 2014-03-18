@@ -17,32 +17,42 @@
 
 #pragma once
 
-#include <stdint.h>
-#include <stddef.h>
+#include <cstdint>
+#include <cstddef>
 #include <uefi/protocols/console/gop.h>
 
+namespace Framebuffer {
+
 // We support only the basic colors for now
-typedef enum {
-    FRAMEBUFFER_BLACK,
-    FRAMEBUFFER_WHITE,
-    FRAMEBUFFER_RED,
-    FRAMEBUFFER_LIME,
-    FRAMEBUFFER_BLUE,
-    FRAMEBUFFER_YELLOW,
-    FRAMEBUFFER_CYAN,
-    FRAMEBUFFER_MAGENTA,
-    FRAMEBUFFER_SILVER,
-    FRAMEBUFFER_GRAY,
-    FRAMEBUFFER_MAROON,
-    FRAMEBUFFER_OLIVE,
-    FRAMEBUFFER_GREEN,
-    FRAMEBUFFER_PURPLE,
-    FRAMEBUFFER_TEAL,
-    FRAMEBUFFER_NAVY
-} framebuffer_color_t;
+enum Color {
+    BLACK,
+    WHITE,
+    RED,
+    LIME,
+    BLUE,
+    YELLOW,
+    CYAN,
+    MAGENTA,
+    SILVER,
+    GRAY,
+    MAROON,
+    OLIVE,
+    GREEN,
+    PURPLE,
+    TEAL,
+    NAVY
+};
 
 // Call that the first time before doing anything with the framebuffer!
-void framebuffer_init(const EFI_GRAPHICS_OUTPUT_PROTOCOL *gop);
+void init(const EFI_GRAPHICS_OUTPUT_PROTOCOL &gop);
 
-int framebuffer_put_string(const char *s, framebuffer_color_t fg,
-                           framebuffer_color_t bg);
+// Clears the screen (yes, really)
+void clear_screen();
+
+// Puts a character on screen
+int put_char(char c, Color fg, Color bg);
+
+// Puts a zero-terminated string on screen
+int put_string(const char *s, Color fg, Color bg);
+
+} // namespace Framebuffer end

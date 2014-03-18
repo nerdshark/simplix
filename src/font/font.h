@@ -17,13 +17,19 @@
 
 #pragma once
 
-#include <stdint.h>
+#include <cstdint>
+#include <cstddef>
+
+namespace Font {
+
+constexpr size_t GLYPH_WIDTH = 8;
+constexpr size_t GLYPH_HEIGHT = 16;
 
 /*
  * Each glyph in the framebuffer is 8x16 pixels.
  * We store 1 glyph as 16 bytes, where each set bit indicates a pixel to draw.
  */
-struct font_glyph {
+struct Glyph {
     uint8_t data[16];
 };
 
@@ -31,4 +37,6 @@ struct font_glyph {
  * Either returns a non-nullptr pointer to a read-only struct Glyph if c is
  * valid (>0), or NULL otherwise.
  */
-const struct font_glyph *font_get_glyph(char c);
+const Glyph *get_glyph(char c);
+
+} // namespace Font end

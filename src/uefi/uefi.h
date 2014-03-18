@@ -21,14 +21,16 @@
 #include <uefi/status_codes.h>
 #include <uefi/protocols/console/console.h>
 
-inline EFI_STATUS uefi_print(EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *out, const CHAR16 *s)
+namespace UEFI {
+
+inline EFI_STATUS print(const EFI_SYSTEM_TABLE &systab, const CHAR16 *s)
 {
-    return out->OutputString(out, (CHAR16 *)s);
+    return systab.ConOut->OutputString(systab.ConOut, (CHAR16 *)s);
 }
 
-const CHAR16 *uefi_error_to_string(EFI_STATUS status);
+const CHAR16 *error_to_string(EFI_STATUS status);
 
-struct uefi_memory_map {
+struct MemoryMap {
     UINTN memory_map_size;
     EFI_MEMORY_DESCRIPTOR *memory_map;
     UINTN map_key;
@@ -39,16 +41,17 @@ struct uefi_memory_map {
 /*
  * Fills @map with the current UEFI-provided memory map.
  */
-void uefi_get_memory_map(const EFI_SYSTEM_TABLE *systab, struct uefi_memory_map *map);
+void get_memory_map(const EFI_SYSTEM_TABLE &systab, MemoryMap &map);
 
 /*
  * Returns a pointer to an EFI_GRAPHICS_OUTPUT_PROTOCOL instance that supports
  * direct framebuffer access and either RGB or BGR colors, nullptr otherwise.
  */
-EFI_GRAPHICS_OUTPUT_PROTOCOL *uefi_get_gop(EFI_HANDLE handle,
-                                           const EFI_SYSTEM_TABLE *systab);
+EFI_GRAPHICS_OUTPUT_PROTOCOL *get_gop(EFI_HANDLE handle, const EFI_SYSTEM_TABLE &systab);
 
 /*
  * Prints '@msg: [@status translated to string]' and halts the CPU.
  */
-void uefi_die(const EFI_SYSTEM_TABLE *systab, EFI_STATUS status, const CHAR16 *msg);
+void die(const EFI_SYSTEM_TABLE &systab, EFI_STATUS status, const CHAR16 *msg);
+
+} // namespace UEFI end
