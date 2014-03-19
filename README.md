@@ -15,10 +15,10 @@ Considering all that, I thought it would be easier to just implement the UEFI in
 
 ### How to Build
 The following assumes a x86-64/AMD64 Linux distribution.  
-The only thing required is a working MinGW x86-64 g++ and linker.
+The only thing required is a working MinGW x86-64 g++ and linker.  
 If you're on Fedora, execute:  
 `sudo yum install mingw64-gcc-c++`  
-If your're on Ubuntu, execute:  
+If you're on Ubuntu, execute:  
 `sudo apt-get install mingw-w64`    
 Then, assuming you're in the cloned directory, just do 'make' and a UEFI application called 'simplix.efi' should be in the directory.  
 
