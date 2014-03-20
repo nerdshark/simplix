@@ -18,25 +18,26 @@
 #pragma once
 
 #include <cstdint>
+#include <misc.h>
 
 namespace Descriptor {
 
-enum PrivilegeLevel {
+enum class PrivilegeLevel {
     KERNEL = 0,
     USER = 3
 };
 
-enum Conformity{
+enum class Conformity{
     NON_CONFORMING = 0,
     CONFORMING = 1
 };
 
-enum Presence {
+enum class Presence {
     NOT_PRESENT = 0,
     PRESENT = 1
 };
 
-enum SystemType {
+enum class SystemType {
     LDT = 0b0010,
     TSS_AVAIL = 0b1001,
     TSS_BUSY = 0b1011,
@@ -45,9 +46,9 @@ enum SystemType {
     TRAP_GATE = 0b1111
 };
 
-enum TableIndicator{
-    TI_GDT = 0,
-    TI_LDT = 1
+enum class TableIndicator{
+    GDT = 0,
+    LDT = 1
 };
 
 /*
@@ -58,6 +59,14 @@ struct SegmentSelector {
     uint16_t ti:1; // Table Indicator
     uint16_t si:13; // Selector Index
 };
+
+inline uint16_t segment_selector_to_scalar(SegmentSelector sel)
+{
+    uint16_t val = sel.si;
+    val = (val << 1) | sel.ti;
+    val = (val << 2) | sel.rpl;
+    return val;
+}
 
 /*
  * Structure of a Descriptor Table Register (GDTR and IDTR).
@@ -86,7 +95,12 @@ struct CSDescriptor {
     uint8_t res7;
 
     CSDescriptor(Conformity conform, PrivilegeLevel priv, Presence present)
-        : c(conform), one1(1), one2(1), dpl(priv), p(present), l(1) { }
+        : c(to_underlying_type(conform)),
+          one1(1),
+          one2(1),
+          dpl(to_underlying_type(priv)),
+          p(to_underlying_type(present)),
+          l(1) { }
 };
 
 /*
@@ -149,8 +163,12 @@ struct IntOrTrapGateDescriptor {
 
     IntOrTrapGateDescriptor(uint64_t toff, SegmentSelector sel, SystemType type,
                             PrivilegeLevel priv, Presence present)
-        : target_offset1(toff & 0xffff), target_selector(sel), type(type),
-          dpl(priv), p(present), target_offset2((toff >> 16) & 0xffff),
+        : target_offset1(toff & 0xffff),
+          target_selector(segment_selector_to_scalar(sel)),
+          type(to_underlying_type(type)),
+          dpl(to_underlying_type(priv)),
+          p(to_underlying_type(present)),
+          target_offset2((toff >> 16) & 0xffff),
           target_offset3((toff >> 32) & 0xffffffff) { }
 };
 

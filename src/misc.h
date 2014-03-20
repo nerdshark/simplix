@@ -17,42 +17,17 @@
 
 #pragma once
 
-#include <cstdint>
-#include <cstddef>
-#include <uefi/protocols/console/gop.h>
+#include <type_traits>
 
-namespace Framebuffer {
+/*
+ * Convert an enum class to its underlying type.
+ */
 
-// We support only the basic colors for now
-enum class Color {
-    BLACK,
-    WHITE,
-    RED,
-    LIME,
-    BLUE,
-    YELLOW,
-    CYAN,
-    MAGENTA,
-    SILVER,
-    GRAY,
-    MAROON,
-    OLIVE,
-    GREEN,
-    PURPLE,
-    TEAL,
-    NAVY
-};
+template<typename T>
+using underlying_type_t = typename std::underlying_type<T>::type;
 
-// Call that the first time before doing anything with the framebuffer!
-void init(const EFI_GRAPHICS_OUTPUT_PROTOCOL &gop);
-
-// Clears the screen (yes, really)
-void clear_screen();
-
-// Puts a character on screen
-int put_char(char c, Color fg, Color bg);
-
-// Puts a zero-terminated string on screen
-int put_string(const char *s, Color fg, Color bg);
-
-} // namespace Framebuffer end
+template<typename T>
+constexpr underlying_type_t<T> to_underlying_type(T x)
+{
+    return (underlying_type_t<T>)x;
+}

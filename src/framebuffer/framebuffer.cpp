@@ -18,6 +18,7 @@
 #include <framebuffer/framebuffer.h>
 #include <font/font.h>
 #include <lib/string.h>
+#include <misc.h>
 
 // Framebuffer start address
 static uint32_t *base_address;
@@ -35,7 +36,7 @@ static unsigned int pixels_per_scan_line;
 static unsigned int current_width;
 static unsigned int current_height;
 
-static uint32_t color_array[Framebuffer::Color::NAVY+1] = { };
+static uint32_t color_array[to_underlying_type(Framebuffer::Color::NAVY)+1] = { };
 
 void Framebuffer::init(const EFI_GRAPHICS_OUTPUT_PROTOCOL &gop)
 {
@@ -49,40 +50,40 @@ void Framebuffer::init(const EFI_GRAPHICS_OUTPUT_PROTOCOL &gop)
 
     switch (gop.Mode->Info->PixelFormat) {
     case PixelRedGreenBlueReserved8BitPerColor:
-        color_array[Framebuffer::Color::BLACK] = 0x00000000;
-        color_array[Framebuffer::Color::WHITE] = 0x00ffffff;
-        color_array[Framebuffer::Color::RED] = 0x000000ff;
-        color_array[Framebuffer::Color::LIME] = 0x0000ff00;
-        color_array[Framebuffer::Color::BLUE] = 0x00ff0000;
-        color_array[Framebuffer::Color::YELLOW] = 0x0000ffff;
-        color_array[Framebuffer::Color::CYAN] = 0x00ffff00;
-        color_array[Framebuffer::Color::MAGENTA] = 0x00ff00ff;
-        color_array[Framebuffer::Color::SILVER] = 0x00c0c0c0;
-        color_array[Framebuffer::Color::GRAY] = 0x00808080;
-        color_array[Framebuffer::Color::MAROON] = 0x00000080;
-        color_array[Framebuffer::Color::OLIVE] = 0x00008080;
-        color_array[Framebuffer::Color::GREEN] = 0x00008000;
-        color_array[Framebuffer::Color::PURPLE] = 0x00800080;
-        color_array[Framebuffer::Color::TEAL] = 0x00808000;
-        color_array[Framebuffer::Color::NAVY] = 0x00800000;
+        color_array[to_underlying_type(Framebuffer::Color::BLACK)] = 0x00000000;
+        color_array[to_underlying_type(Framebuffer::Color::WHITE)] = 0x00ffffff;
+        color_array[to_underlying_type(Framebuffer::Color::RED)] = 0x000000ff;
+        color_array[to_underlying_type(Framebuffer::Color::LIME)] = 0x0000ff00;
+        color_array[to_underlying_type(Framebuffer::Color::BLUE)] = 0x00ff0000;
+        color_array[to_underlying_type(Framebuffer::Color::YELLOW)] = 0x0000ffff;
+        color_array[to_underlying_type(Framebuffer::Color::CYAN)] = 0x00ffff00;
+        color_array[to_underlying_type(Framebuffer::Color::MAGENTA)] = 0x00ff00ff;
+        color_array[to_underlying_type(Framebuffer::Color::SILVER)] = 0x00c0c0c0;
+        color_array[to_underlying_type(Framebuffer::Color::GRAY)] = 0x00808080;
+        color_array[to_underlying_type(Framebuffer::Color::MAROON)] = 0x00000080;
+        color_array[to_underlying_type(Framebuffer::Color::OLIVE)] = 0x00008080;
+        color_array[to_underlying_type(Framebuffer::Color::GREEN)] = 0x00008000;
+        color_array[to_underlying_type(Framebuffer::Color::PURPLE)] = 0x00800080;
+        color_array[to_underlying_type(Framebuffer::Color::TEAL)] = 0x00808000;
+        color_array[to_underlying_type(Framebuffer::Color::NAVY)] = 0x00800000;
         break;
     case PixelBlueGreenRedReserved8BitPerColor:
-        color_array[Framebuffer::Color::BLACK] = 0x00000000;
-        color_array[Framebuffer::Color::WHITE] = 0x00ffffff;
-        color_array[Framebuffer::Color::RED] = 0x00ff0000;
-        color_array[Framebuffer::Color::LIME] = 0x0000ff00;
-        color_array[Framebuffer::Color::BLUE] = 0x000000ff;
-        color_array[Framebuffer::Color::YELLOW] = 0x00ffff00;
-        color_array[Framebuffer::Color::CYAN] = 0x0000ffff;
-        color_array[Framebuffer::Color::MAGENTA] = 0x00ff00ff;
-        color_array[Framebuffer::Color::SILVER] = 0x00c0c0c0;
-        color_array[Framebuffer::Color::GRAY] = 0x00808080;
-        color_array[Framebuffer::Color::MAROON] = 0x00800000;
-        color_array[Framebuffer::Color::OLIVE] = 0x00808000;
-        color_array[Framebuffer::Color::GREEN] = 0x00008000;
-        color_array[Framebuffer::Color::PURPLE] = 0x00800080;
-        color_array[Framebuffer::Color::TEAL] = 0x00008080;
-        color_array[Framebuffer::Color::NAVY] = 0x00000080;
+        color_array[to_underlying_type(Framebuffer::Color::BLACK)] = 0x00000000;
+        color_array[to_underlying_type(Framebuffer::Color::WHITE)] = 0x00ffffff;
+        color_array[to_underlying_type(Framebuffer::Color::RED)] = 0x00ff0000;
+        color_array[to_underlying_type(Framebuffer::Color::LIME)] = 0x0000ff00;
+        color_array[to_underlying_type(Framebuffer::Color::BLUE)] = 0x000000ff;
+        color_array[to_underlying_type(Framebuffer::Color::YELLOW)] = 0x00ffff00;
+        color_array[to_underlying_type(Framebuffer::Color::CYAN)] = 0x0000ffff;
+        color_array[to_underlying_type(Framebuffer::Color::MAGENTA)] = 0x00ff00ff;
+        color_array[to_underlying_type(Framebuffer::Color::SILVER)] = 0x00c0c0c0;
+        color_array[to_underlying_type(Framebuffer::Color::GRAY)] = 0x00808080;
+        color_array[to_underlying_type(Framebuffer::Color::MAROON)] = 0x00800000;
+        color_array[to_underlying_type(Framebuffer::Color::OLIVE)] = 0x00808000;
+        color_array[to_underlying_type(Framebuffer::Color::GREEN)] = 0x00008000;
+        color_array[to_underlying_type(Framebuffer::Color::PURPLE)] = 0x00800080;
+        color_array[to_underlying_type(Framebuffer::Color::TEAL)] = 0x00008080;
+        color_array[to_underlying_type(Framebuffer::Color::NAVY)] = 0x00000080;
         break;
     default:
         break;
@@ -118,11 +119,12 @@ static void put_glyph(const Font::Glyph &glyph, Framebuffer::Color fg,
 
         for (unsigned int j = 0; j < Font::GLYPH_WIDTH; ++j) {
             int width = current_width + j;
+            auto idx = height * pixels_per_scan_line + width;
 
             if (glyph.data[i] & (0x80 >> j))
-                base_address[height * pixels_per_scan_line + width] = color_array[fg];
+                base_address[idx] = color_array[to_underlying_type(fg)];
             else
-                base_address[height * pixels_per_scan_line + width] = color_array[bg];
+                base_address[idx] = color_array[to_underlying_type(bg)];
         }
     }
 }
@@ -148,8 +150,7 @@ int Framebuffer::put_char(char c, Framebuffer::Color fg, Framebuffer::Color bg)
     return 0;
 }
 
-int Framebuffer::put_string(const char *s, Framebuffer::Color fg,
-                            Framebuffer::Color bg)
+int Framebuffer::put_string(const char *s, Framebuffer::Color fg, Framebuffer::Color bg)
 {
     for (; *s != '\0'; ++s)
         if (Framebuffer::put_char(*s, fg, bg) == -1)

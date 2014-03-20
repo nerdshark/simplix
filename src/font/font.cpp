@@ -16,7 +16,7 @@
  */
 
 #include <font/font.h>
-#include <stddef.h>
+#include <cstddef>
 
 /*
  * An array of glyphs that is indexed by their corresponding characters,
