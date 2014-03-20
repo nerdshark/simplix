@@ -27,7 +27,7 @@ enum class PrivilegeLevel {
     USER = 3
 };
 
-enum class Conformity{
+enum class Conformity {
     NON_CONFORMING = 0,
     CONFORMING = 1
 };
@@ -46,7 +46,7 @@ enum class SystemType {
     TRAP_GATE = 0b1111
 };
 
-enum class TableIndicator{
+enum class TableIndicator {
     GDT = 0,
     LDT = 1
 };
@@ -131,7 +131,7 @@ struct SystemDescriptor {
  */
 struct CallGateDescriptor {
     uint16_t target_offset1;
-    SegmentSelector target_selector;
+    uint16_t target_selector;
     uint8_t ign;
     uint8_t type:4;
     uint8_t zero:1;
@@ -150,7 +150,7 @@ struct CallGateDescriptor {
  */
 struct IntOrTrapGateDescriptor {
     uint16_t target_offset1;
-    SegmentSelector target_selector;
+    uint16_t target_selector;
     uint8_t ist:3;
     uint8_t ign:5;
     uint8_t type:4;
