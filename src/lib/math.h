@@ -28,27 +28,27 @@ long labs(long i);
 long long llabs(long long i);
 intmax_t imaxabs(intmax_t i);
 
-template<class T, class U>
+template<typename T, typename U>
 constexpr bool multiply_would_overflow(T val1, U val2, uintmax_t max)
 {
     return (val1 > 0 && val2 > 0 && val1 > max / val2)
         || (val1 <= 0 && val2 <= 0 && val1 != 0 && val2 < max / val1);
 }
 
-template<class T, class U>
+template<typename T, typename U>
 constexpr bool multiply_would_underflow(T val1, U val2, intmax_t min)
 {
     return (val1 > 0 && val2 <= 0 && val2 < min / val1)
         || (val1 <= 0 && val2 > 0 && val1 < min / val2);
 }
 
-template <class T, class U>
+template <typename T, typename U>
 constexpr bool add_would_overflow(T val1, U val2, uintmax_t max)
 {
     return val2 > 0 && val1 > max - val2;
 }
 
-template <class T, class U>
+template <typename T, typename U>
 constexpr bool add_would_underflow(T val1, U val2, intmax_t min)
 {
     return val2 < 0 && val1 < min - val2;
