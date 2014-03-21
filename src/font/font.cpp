@@ -1565,7 +1565,7 @@ static const Font::Glyph glyph_array[] = {
 const Font::Glyph *Font::get_glyph(char c)
 {
     if (c < 0) // char is never > 127
-        return NULL;
+        return nullptr;
 
     return &glyph_array[(int)c];
 }

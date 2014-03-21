@@ -140,7 +140,7 @@ int Framebuffer::put_char(char c, Framebuffer::Color fg, Framebuffer::Color bg)
         newline();
 
     const Font::Glyph *glyph = Font::get_glyph(c);
-    if (glyph == NULL)
+    if (glyph == nullptr)
         return -1;
 
     put_glyph(*glyph, fg, bg);

@@ -116,7 +116,7 @@ end:
     if (negative)
         value = -value; // Apparently, letting it underflow here is OK
 
-    if (endptr != NULL)
+    if (endptr != nullptr)
         *endptr = (char *)nptr;
 
     return value;
@@ -213,7 +213,7 @@ end:
         value = -value;
     }
 
-    if (endptr != NULL)
+    if (endptr != nullptr)
         *endptr = (char *)nptr;
 
     return value;

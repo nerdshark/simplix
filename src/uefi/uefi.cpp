@@ -79,7 +79,7 @@ EFI_GRAPHICS_OUTPUT_PROTOCOL *UEFI::get_gop(EFI_HANDLE handle,
     UINTN num;
     EFI_HANDLE *handles;
 
-    EFI_STATUS status = bs->LocateHandleBuffer(ByProtocol, &gop_guid, NULL,
+    EFI_STATUS status = bs->LocateHandleBuffer(ByProtocol, &gop_guid, nullptr,
                                                &num, &handles);
     if (EFI_STATUS_IS_ERROR(status))
         UEFI::die(systab, status, L"LocateHandleBuffer");
@@ -88,7 +88,7 @@ EFI_GRAPHICS_OUTPUT_PROTOCOL *UEFI::get_gop(EFI_HANDLE handle,
 
     for (UINTN i = 0; i < num; ++i) {
         status = bs->OpenProtocol(handles[i], &gop_guid, (VOID **)&gop, handle,
-                                  NULL, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
+                                  nullptr, EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL);
         if (EFI_STATUS_IS_ERROR(status))
             UEFI::die(systab, status, L"OpenProtocol");
 
@@ -97,7 +97,7 @@ EFI_GRAPHICS_OUTPUT_PROTOCOL *UEFI::get_gop(EFI_HANDLE handle,
             return gop;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void UEFI::get_memory_map(const EFI_SYSTEM_TABLE &systab, UEFI::MemoryMap &map)

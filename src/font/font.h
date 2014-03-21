@@ -35,7 +35,7 @@ struct Glyph {
 
 /*
  * Either returns a non-nullptr pointer to a read-only struct Glyph if c is
- * valid (>0), or NULL otherwise.
+ * valid (>= 0), nullptr otherwise.
  */
 const Glyph *get_glyph(char c);
 

@@ -27,7 +27,7 @@ EFI_STATUS EFIAPI kmain(EFI_HANDLE handle, EFI_SYSTEM_TABLE *systab)
     EFI_BOOT_SERVICES *bs = systab->BootServices;
 
     EFI_GRAPHICS_OUTPUT_PROTOCOL *gop = UEFI::get_gop(handle, *systab);
-    if (gop == NULL) {
+    if (gop == nullptr) {
         UEFI::print(*systab, L"No GOP framebuffer support!\r\n");
         __asm volatile ("cli \n\t hlt");
     }

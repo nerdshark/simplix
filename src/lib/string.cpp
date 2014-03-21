@@ -117,7 +117,7 @@ static char *_strchr(const char *s, int c)
         if (*s == c)
             return (char *)s;
 
-    return NULL;
+    return nullptr;
 }
 
 const char *strchr(const char *s, int c)
@@ -132,8 +132,8 @@ char *strchr(char *s, int c)
 
 static char *_strrchr(const char *s, int c)
 {
-    char *p = NULL;
-    while ((s = strchr(s, c)) != NULL)
+    char *p = nullptr;
+    while ((s = strchr(s, c)) != nullptr)
         p = (char *)s;
 
     return p;
@@ -170,11 +170,11 @@ char *strchrnul(char *s, int c)
 size_t strspn(const char *s, const char *accept)
 {
     s = strpbrk(s, accept);
-    if (s == NULL)
+    if (s == nullptr)
         return 0;
 
     size_t len = 0;
-    while (strchr(accept, *s++) != NULL)
+    while (strchr(accept, *s++) != nullptr)
         ++len;
 
     return len;
@@ -183,11 +183,11 @@ size_t strspn(const char *s, const char *accept)
 size_t strcspn(const char *s, const char *reject)
 {
     const char *p = strpbrk(s, reject);
-    if (p != NULL && *p == *s)
+    if (p != nullptr && *p == *s)
         return 0;
 
     size_t len = 0;
-    while (strchr(reject, *s++) == NULL)
+    while (strchr(reject, *s++) == nullptr)
         ++len;
 
     return len;
@@ -196,10 +196,10 @@ size_t strcspn(const char *s, const char *reject)
 static char *_strpbrk(const char *s, const char *accept)
 {
     for (; *s != '\0'; ++s)
-        if (strchr(accept, *s) != NULL)
+        if (strchr(accept, *s) != nullptr)
             return (char *)s;
 
-    return NULL;
+    return nullptr;
 }
 
 const char *strpbrk(const char *s, const char *accept)
@@ -218,7 +218,7 @@ static char *_strstr(const char *haystack, const char *needle)
         if (strcmp(haystack, needle) == 0)
             return (char *)haystack;
 
-    return NULL;
+    return nullptr;
 }
 
 const char *strstr(const char *haystack, const char *needle)
@@ -239,7 +239,7 @@ static void *_memchr(const void *s, int c, size_t n)
         if (t[i] == c)
             return (void *)(t+i);
 
-    return NULL;
+    return nullptr;
 }
 
 const void *memchr(const void *s, int c, size_t n)
@@ -260,7 +260,7 @@ static void *_memrchr(const void *s, int c, size_t n)
         if (t[i-1] == c)
             return (void *)(t+i-1);
 
-    return NULL;
+    return nullptr;
 }
 
 const void *memrchr(const void *s, int c, size_t n)
