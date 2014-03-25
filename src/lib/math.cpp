@@ -17,7 +17,7 @@
 
 #include <lib/math.h>
 
-int pow(int x, unsigned int y, Error::Error &err)
+int pow(int x, unsigned int y, Error::Code &err)
 {
     if (y == 0)
         return 1;
@@ -25,11 +25,11 @@ int pow(int x, unsigned int y, Error::Error &err)
     int a = x;
     for (unsigned int i = 1; i < y; ++i) {
         if (multiply_would_overflow(a, x, INT_MAX)) {
-            err.set_code(Error::Code::ERANGE);
+            err= Error::Code::ERANGE;
             return INT_MAX;
         }
         if (multiply_would_underflow(a, x, INT_MIN)) {
-            err.set_code(Error::Code::ERANGE);
+            err = Error::Code::ERANGE;
             return INT_MIN;
         }
 

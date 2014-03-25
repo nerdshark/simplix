@@ -15,7 +15,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <limits.h>
 #include <lib/stdlib.h>
 #include <lib/ctype.h>
 #include <lib/math.h>
@@ -37,10 +36,10 @@ static int char_to_value(char c)
 }
 
 uintmax_t strtoumax(const char *__restrict nptr, char **__restrict endptr,
-                    int base, Error::Error &err)
+                    int base, Error::Code &err)
 {
     if ((base < 2 || base > 36) && base != 0) {
-        err.set_code(Error::Code::EINVAL);
+        err = Error::Code::EINVAL;
         return 0;
     }
 
@@ -90,22 +89,22 @@ uintmax_t strtoumax(const char *__restrict nptr, char **__restrict endptr,
         if (digit == -1 || digit >= base)
             goto end;
 
-        Error::Error err2(Error::Code::SUCCESS);
+        Error::Code err2 = Error::Code::SUCCESS;
         unsigned int place_value = pow(base, position, err2);
-        if (err2.get_code() != Error::Code::SUCCESS) {
-            err.set_code(Error::Code::ERANGE);
+        if (err2 != Error::Code::SUCCESS) {
+            err = Error::Code::ERANGE;
             return UINTMAX_MAX;
         }
 
         if (multiply_would_overflow(digit, place_value, UINTMAX_MAX)) {
-            err.set_code(Error::Code::ERANGE);
+            err = Error::Code::ERANGE;
             return UINTMAX_MAX;
         }
 
         uintmax_t digit_value = digit * place_value;
 
         if (add_would_overflow(value, digit_value, UINTMAX_MAX)) {
-            err.set_code(Error::Code::ERANGE);
+            err = Error::Code::ERANGE;
             return UINTMAX_MAX;
         }
 
@@ -123,10 +122,10 @@ end:
 }
 
 intmax_t strtoimax(const char *__restrict nptr, char **__restrict endptr,
-                   int base, Error::Error &err)
+                   int base, Error::Code &err)
 {
     if ((base < 2 || base > 36) && base != 0) {
-        err.set_code(Error::Code::EINVAL);
+        err = Error::Code::EINVAL;
         return -1;
     }
 
@@ -176,17 +175,17 @@ intmax_t strtoimax(const char *__restrict nptr, char **__restrict endptr,
         if (digit == -1 || digit >= base)
             goto end;
 
-        Error::Error err2(Error::Code::SUCCESS);
+        Error::Code err2 = Error::Code::SUCCESS;
         unsigned int place_value = pow(base, position, err2);
-        if (err2.get_code() != Error::Code::SUCCESS) {
-            err.set_code(Error::Code::ERANGE);
+        if (err2 != Error::Code::SUCCESS) {
+            err = Error::Code::ERANGE;
             if (negative)
                 return INTMAX_MIN;
             return INTMAX_MAX;
         }
 
         if (multiply_would_overflow(digit, place_value, INTMAX_MAX)) {
-            err.set_code(Error::Code::ERANGE);
+            err = Error::Code::ERANGE;
             if (negative)
                 return INTMAX_MIN;
             return INTMAX_MAX;
@@ -195,7 +194,7 @@ intmax_t strtoimax(const char *__restrict nptr, char **__restrict endptr,
         intmax_t digit_value = digit * place_value;
 
         if (add_would_overflow(value, digit_value, INTMAX_MAX)) {
-            err.set_code(Error::Code::ERANGE);
+            err = Error::Code::ERANGE;
             if (negative)
                 return INTMAX_MIN;
             return INTMAX_MAX;
@@ -206,8 +205,8 @@ intmax_t strtoimax(const char *__restrict nptr, char **__restrict endptr,
 
 end:
     if (negative) {
-        if (add_would_underflow(value, -1, INTMAX_MIN)) {
-            err.set_code(Error::Code::ERANGE);
+        if (multiply_would_underflow(value, -1, INTMAX_MIN)) {
+            err = Error::Code::ERANGE;
             return INTMAX_MIN;
         }
         value = -value;
@@ -220,12 +219,12 @@ end:
 }
 
 unsigned long long strtoull(const char *__restrict nptr, char **__restrict endptr,
-                            int base, Error::Error &err)
+                            int base, Error::Code &err)
 {
     uintmax_t val = strtoumax(nptr, endptr, base, err);
 
     if (val > ULLONG_MAX) {
-        err.set_code(Error::Code::ERANGE);
+        err = Error::Code::ERANGE;
         return ULLONG_MAX;
     }
 
@@ -233,16 +232,16 @@ unsigned long long strtoull(const char *__restrict nptr, char **__restrict endpt
 }
 
 long long strtoll(const char *__restrict nptr, char **__restrict endptr,
-                  int base, Error::Error &err)
+                  int base, Error::Code &err)
 {
     intmax_t val = strtoimax(nptr, endptr, base, err);
 
     if (val > LLONG_MAX) {
-        err.set_code(Error::Code::ERANGE);
+        err = Error::Code::ERANGE;
         return LLONG_MAX;
     }
     if (val < LLONG_MIN) {
-        err.set_code(Error::Code::ERANGE);
+        err = Error::Code::ERANGE;
         return LLONG_MIN;
     }
 
@@ -250,16 +249,16 @@ long long strtoll(const char *__restrict nptr, char **__restrict endptr,
 }
 
 long strtol(const char *__restrict nptr, char **__restrict endptr,
-            int base, Error::Error &err)
+            int base, Error::Code &err)
 {
     intmax_t val = strtoimax(nptr, endptr, base, err);
 
     if (val > LONG_MAX) {
-        err.set_code(Error::Code::ERANGE);
+        err = Error::Code::ERANGE;
         return LONG_MAX;
     }
     if (val < LONG_MIN) {
-        err.set_code(Error::Code::ERANGE);
+        err = Error::Code::ERANGE;
         return LONG_MIN;
     }
 
@@ -267,12 +266,12 @@ long strtol(const char *__restrict nptr, char **__restrict endptr,
 }
 
 unsigned long strtoul(const char *__restrict nptr, char **__restrict endptr,
-                      int base, Error::Error &err)
+                      int base, Error::Code &err)
 {
     uintmax_t val = strtoumax(nptr, endptr, base, err);
 
     if (val > ULONG_MAX) {
-        err.set_code(Error::Code::ERANGE);
+        err = Error::Code::ERANGE;
         return ULONG_MAX;
     }
 

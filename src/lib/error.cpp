@@ -16,6 +16,7 @@
  */
 
 #include <lib/error.h>
+#include <misc.h>
 
 static const char *error_code_to_string_array[] = {
     [Error::Code::SUCCESS] = "Success",
@@ -23,7 +24,7 @@ static const char *error_code_to_string_array[] = {
     [Error::Code::ERANGE] = "Range error"
 };
 
-const char *Error::Error::strerror() const
+const char *Error::to_string(Code code)
 {
-    return error_code_to_string_array[code];
+    return error_code_to_string_array[to_underlying_type(code)];
 }

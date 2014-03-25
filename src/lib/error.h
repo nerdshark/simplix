@@ -19,20 +19,12 @@
 
 namespace Error {
 
-enum Code {
+enum class Code {
     SUCCESS,
     EINVAL,
     ERANGE
 };
 
-class Error {
-private:
-    Code code;
-public:
-    Error(Code code) : code(code) { }
-    const char *strerror() const;
-    void set_code(Code c) { code = c; }
-    Code get_code() { return code; }
-};
+const char *to_string(Code code);
 
 } // namespace Error end
