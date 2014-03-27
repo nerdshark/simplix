@@ -15,7 +15,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#pragma once
+
 #include <lib/stdio.h>
+
+/*
+ * Don't use this before you initialized the framebuffer!!
+ */
 
 #ifdef NDEBUG
 
