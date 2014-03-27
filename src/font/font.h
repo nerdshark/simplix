@@ -34,9 +34,9 @@ struct Glyph {
 };
 
 /*
- * Either returns a non-nullptr pointer to a read-only struct Glyph if c is
- * valid (>= 0), nullptr otherwise.
+ * Returns a const-reference to the glyph corresponding to the character c.
+ * @c is expected to be >= 0.
  */
-const Glyph *get_glyph(char c);
+const Glyph &get_glyph(char c);
 
 } // namespace Font end

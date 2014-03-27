@@ -17,6 +17,7 @@
 
 #include <font/font.h>
 #include <cstddef>
+#include <lib/assert.h>
 
 /*
  * An array of glyphs that is indexed by their corresponding characters,
@@ -1562,10 +1563,8 @@ static const Font::Glyph glyph_array[] = {
     [127] = { { } }
 };
 
-const Font::Glyph *Font::get_glyph(char c)
+const Font::Glyph &Font::get_glyph(char c)
 {
-    if (c < 0) // char is never > 127
-        return nullptr;
-
-    return &glyph_array[(int)c];
+    assert(c >= 0); // char is never > 127
+    return glyph_array[(int)c];
 }

@@ -139,11 +139,7 @@ int Framebuffer::put_char(char c, Framebuffer::Color fg, Framebuffer::Color bg)
     if (current_width + Font::GLYPH_WIDTH > max_width)
         newline();
 
-    const Font::Glyph *glyph = Font::get_glyph(c);
-    if (glyph == nullptr)
-        return -1;
-
-    put_glyph(*glyph, fg, bg);
+    put_glyph(Font::get_glyph(c), fg, bg);
 
     current_width += Font::GLYPH_WIDTH;
 
