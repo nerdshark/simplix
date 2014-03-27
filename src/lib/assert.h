@@ -30,7 +30,7 @@
 #define assert(condition) \
     do { \
         if ((condition) == 0)  { \
-            printf("%s:%d: %s: Assertion %s failed.\n", \
+            printf("%s:%d: %s: Assertion '%s' failed.\n", \
                    __FILE__, __LINE__, __PRETTY_FUNCTION__, #condition); \
             __asm volatile ("hlt"); \
         } \
