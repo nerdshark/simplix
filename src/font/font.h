@@ -22,15 +22,14 @@
 
 namespace Font {
 
-constexpr size_t GLYPH_WIDTH = 8;
-constexpr size_t GLYPH_HEIGHT = 16;
-
 /*
  * Each glyph in the framebuffer is 8x16 pixels.
  * We store 1 glyph as 16 bytes, where each set bit indicates a pixel to draw.
  */
 struct Glyph {
     uint8_t data[16];
+    constexpr static size_t WIDTH = 8;
+    constexpr static size_t HEIGHT = 16;
 };
 
 /*

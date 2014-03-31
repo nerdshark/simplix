@@ -104,20 +104,20 @@ static void newline()
 {
     current_width = 0;
 
-    if (current_height + Font::GLYPH_HEIGHT > max_height) {
+    if (current_height + Font::Glyph::HEIGHT > max_height) {
         scroll();
         current_height = max_height-1;
     } else
-        current_height += Font::GLYPH_HEIGHT;
+        current_height += Font::Glyph::HEIGHT;
 }
 
 static void put_glyph(const Font::Glyph &glyph, Framebuffer::Color fg,
                       Framebuffer::Color bg)
 {
-    for (unsigned int i = 0; i < Font::GLYPH_HEIGHT; ++i) {
+    for (unsigned int i = 0; i < Font::Glyph::HEIGHT; ++i) {
         int height = current_height + i;
 
-        for (unsigned int j = 0; j < Font::GLYPH_WIDTH; ++j) {
+        for (unsigned int j = 0; j < Font::Glyph::WIDTH; ++j) {
             int width = current_width + j;
             auto idx = height * pixels_per_scan_line + width;
 
@@ -136,12 +136,12 @@ int Framebuffer::put_char(char c, Framebuffer::Color fg, Framebuffer::Color bg)
         return 0;
     }
 
-    if (current_width + Font::GLYPH_WIDTH > max_width)
+    if (current_width + Font::Glyph::WIDTH > max_width)
         newline();
 
     put_glyph(Font::get_glyph(c), fg, bg);
 
-    current_width += Font::GLYPH_WIDTH;
+    current_width += Font::Glyph::WIDTH;
 
     return 0;
 }
