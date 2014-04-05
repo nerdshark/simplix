@@ -33,19 +33,19 @@
  */
 
 int vprintf(const char *__restrict format, va_list ap)
-__attribute((format(printf, 1, 0)));
+__attribute((format(gnu_printf, 1, 0)));
 
 int vsprintf(char *__restrict str, const char *__restrict format, va_list ap)
-__attribute((format(printf, 2, 0)));
+__attribute((format(gnu_printf, 2, 0)));
 
 int vsnprintf(char *__restrict str, size_t size, const char *__restrict format, va_list ap)
-__attribute((format(printf, 3, 0)));
+__attribute((format(gnu_printf, 3, 0)));
 
 int printf(const char *__restrict format, ...)
-__attribute((format(printf, 1, 2)));
+__attribute((format(gnu_printf, 1, 2)));
 
 int sprintf(char *__restrict str, const char *__restrict format, ...)
-__attribute((format(printf, 2, 3)));
+__attribute((format(gnu_printf, 2, 3)));
 
 int snprintf(char *__restrict str, size_t size, const char *__restrict format, ...)
-__attribute((format(printf, 3, 4)));
+__attribute((format(gnu_printf, 3, 4)));
