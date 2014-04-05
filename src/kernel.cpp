@@ -41,6 +41,8 @@ EFI_STATUS EFIAPI kmain(EFI_HANDLE handle, EFI_SYSTEM_TABLE *systab)
     if (EFI_STATUS_IS_ERROR(status))
         UEFI::die(*systab, status, L"ExitBootServices");
 
+    Framebuffer::clear_screen();
+
     char buf[CPUID::VENDOR_STR_BUF_SIZE];
     printf("Welcome to Simplix! [CPU: %s]\n", CPUID::get_vendor_string(buf));
 
