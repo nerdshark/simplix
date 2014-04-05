@@ -46,14 +46,14 @@ uintmax_t strtoumax(const char *__restrict nptr, char **__restrict endptr,
     while (isspace(*nptr))
         ++nptr;
 
-    int negative = 0;
+    bool negative = false;
 
     switch (*nptr) {
     case '+':
         ++nptr;
         break;
     case '-':
-        negative = 1;
+        negative = true;
         ++nptr;
         break;
     default:
@@ -132,14 +132,14 @@ intmax_t strtoimax(const char *__restrict nptr, char **__restrict endptr,
     while (isspace(*nptr))
         ++nptr;
 
-    int negative = 0;
+    bool negative = false;
 
     switch (*nptr) {
     case '+':
         ++nptr;
         break;
     case '-':
-        negative = 1;
+        negative = true;
         ++nptr;
         break;
     default:
