@@ -54,4 +54,6 @@ EFI_GRAPHICS_OUTPUT_PROTOCOL *get_gop(EFI_HANDLE handle, const EFI_SYSTEM_TABLE 
  */
 void die(const EFI_SYSTEM_TABLE &systab, EFI_STATUS status, const CHAR16 *msg);
 
+const char *memory_type_to_string(EFI_MEMORY_TYPE type);
+
 } // namespace UEFI end

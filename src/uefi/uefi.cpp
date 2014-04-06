@@ -16,6 +16,7 @@
  */
 
 #include <uefi/uefi.h>
+#include <lib/assert.h>
 
 static const CHAR16 *status_array[] = {
     [EFI_SUCCESS] = L"Success",
@@ -124,4 +125,28 @@ void UEFI::get_memory_map(const EFI_SYSTEM_TABLE &systab, UEFI::MemoryMap &map)
         if (EFI_STATUS_IS_ERROR(status) && status != EFI_BUFFER_TOO_SMALL)
             UEFI::die(systab, status, L"GetMemoryMap");
     } while (status == EFI_BUFFER_TOO_SMALL);
+}
+
+static const char *memtype_to_string_array[] = {
+    [EfiReservedMemoryType] = "Reserved",
+    [EfiLoaderCode] = "Loader code",
+    [EfiLoaderData] = "Loader data",
+    [EfiBootServicesCode] = "Boot services code",
+    [EfiBootServicesData] = "Boot services data",
+    [EfiRuntimeServicesCode] = "Runtime services code",
+    [EfiRuntimeServicesData] = "Runtime services data",
+    [EfiConventionalMemory] = "Conventional memory",
+    [EfiUnusableMemory] = "Unsusable memory",
+    [EfiACPIReclaimMemory] = "ACPI reclaim memory",
+    [EfiACPIMemoryNVS] = "ACPI memory NVS",
+    [EfiMemoryMappedIO] = "Memory-mapped I/O",
+    [EfiMemoryMappedIOPortSpace] = "Memory-mapped I/O port space",
+    [EfiPalCode] = "Pal code"
+};
+
+const char *UEFI::memory_type_to_string(EFI_MEMORY_TYPE type)
+{
+    assert(type >=EfiReservedMemoryType);
+    assert(type <= EfiPalCode);
+    return memtype_to_string_array[type];
 }
