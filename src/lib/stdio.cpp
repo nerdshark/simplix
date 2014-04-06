@@ -33,13 +33,14 @@ static int unsigned_num_to_str(char *str, size_t size, uintmax_t x, int base,
 
 int vprintf(const char *__restrict format, va_list ap)
 {
-    // You may ask yourself: why 3920???
-    // answer: that's the amount I can allocate here without causing
+    // You may ask yourself: why 2048 bytes for buf???
+    // Answer: that's the amount I can allocate here without causing
     // an 'undefined blabla ___chkstk_ms' gcc failure.
     // My only theory is that, as soon as a stack frame reaches a certain size,
     // gcc tries to run some stack-checking code on it, which for whatever
     // reason(freestanding?) is not there.
-    char buf[3920];
+    // Testing indicates something like 3936 bytes is the limit.
+    char buf[2048];
     int ret = vsnprintf(buf, sizeof(buf), format, ap);
     if (ret == -1)
         return -1;
