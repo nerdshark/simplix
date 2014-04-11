@@ -90,23 +90,22 @@ void Framebuffer::init(const EFI_GRAPHICS_OUTPUT_PROTOCOL &gop)
     }
 }
 
-// Move every line except the first one up, make last row blank
+// Move every line until except the first one up, make last row blank
 static void scroll()
 {
-    for (unsigned int i = 0; i < max_height-1; ++i)
-        memcpy(&base_address[i*pixels_per_scan_line], &base_address[(i+1)*pixels_per_scan_line], max_width*4);
+    for (unsigned int i = 0; i < current_height; i += Font::Glyph::HEIGHT)
+        memcpy(&base_address[i*pixels_per_scan_line], &base_address[(i+Font::Glyph::HEIGHT)*pixels_per_scan_line], pixels_per_scan_line*Font::Glyph::HEIGHT*4);
 
-    memset(&base_address[(max_height-1) * pixels_per_scan_line], 0x00, max_width*4*4);
+    memset(&base_address[current_height * pixels_per_scan_line], 0x00, pixels_per_scan_line*Font::Glyph::HEIGHT*4);
 }
 
 static void newline()
 {
     current_width = 0;
 
-    if (current_height + Font::Glyph::HEIGHT > max_height) {
+    if (current_height + Font::Glyph::HEIGHT > max_height - Font::Glyph::HEIGHT)
         scroll();
-        current_height = max_height-1;
-    } else
+    else
         current_height += Font::Glyph::HEIGHT;
 }
 
@@ -128,11 +127,11 @@ static void put_glyph(const Font::Glyph &glyph, Framebuffer::Color fg,
     }
 }
 
-int Framebuffer::put_char(char c, Framebuffer::Color fg, Framebuffer::Color bg)
+void Framebuffer::put_char(char c, Framebuffer::Color fg, Framebuffer::Color bg)
 {
     if (c == '\n') {
         newline();
-        return 0;
+        return;
     }
 
     if (current_width + Font::Glyph::WIDTH > max_width)
@@ -141,17 +140,12 @@ int Framebuffer::put_char(char c, Framebuffer::Color fg, Framebuffer::Color bg)
     put_glyph(Font::get_glyph(c), fg, bg);
 
     current_width += Font::Glyph::WIDTH;
-
-    return 0;
 }
 
-int Framebuffer::put_string(const char *s, Framebuffer::Color fg, Framebuffer::Color bg)
+void Framebuffer::put_string(const char *s, Framebuffer::Color fg, Framebuffer::Color bg)
 {
     for (; *s != '\0'; ++s)
-        if (Framebuffer::put_char(*s, fg, bg) == -1)
-            return -1;
-
-    return 0;
+        Framebuffer::put_char(*s, fg, bg);
 }
 
 void Framebuffer::clear_screen()
