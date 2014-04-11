@@ -44,8 +44,7 @@ int vprintf(const char *__restrict format, va_list ap)
     int ret = vsnprintf(buf, sizeof(buf), format, ap);
     if (ret == -1)
         return -1;
-    ret = Framebuffer::put_string(buf, Framebuffer::Color::WHITE,
-                                  Framebuffer::Color::BLACK);
+    Framebuffer::put_string(buf, Framebuffer::Color::WHITE, Framebuffer::Color::BLACK);
     return ret;
 }
 

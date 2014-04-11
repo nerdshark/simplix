@@ -50,9 +50,9 @@ void init(const EFI_GRAPHICS_OUTPUT_PROTOCOL &gop);
 void clear_screen();
 
 // Puts a character on screen
-int put_char(char c, Color fg, Color bg);
+void put_char(char c, Color fg, Color bg);
 
 // Puts a zero-terminated string on screen
-int put_string(const char *s, Color fg, Color bg);
+void put_string(const char *s, Color fg, Color bg);
 
 } // namespace Framebuffer end
