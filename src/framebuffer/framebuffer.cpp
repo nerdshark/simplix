@@ -93,10 +93,11 @@ void Framebuffer::init(const EFI_GRAPHICS_OUTPUT_PROTOCOL &gop)
 // Move every line until except the first one up, make last row blank
 static void scroll()
 {
-    for (unsigned int i = 0; i < current_height; i += Font::Glyph::HEIGHT)
-        memcpy(&base_address[i*pixels_per_scan_line], &base_address[(i+Font::Glyph::HEIGHT)*pixels_per_scan_line], pixels_per_scan_line*Font::Glyph::HEIGHT*4);
+    for (unsigned int i = 0; i < current_height * pixels_per_scan_line; ++i)
+        base_address[i] = base_address[i + Font::Glyph::HEIGHT * pixels_per_scan_line];
 
-    memset(&base_address[current_height * pixels_per_scan_line], 0x00, pixels_per_scan_line*Font::Glyph::HEIGHT*4);
+    for (unsigned int i = 0; i < Font::Glyph::HEIGHT * pixels_per_scan_line; ++i)
+        base_address[current_height * pixels_per_scan_line + i] = 0;
 }
 
 static void newline()
