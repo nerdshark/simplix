@@ -84,14 +84,18 @@ void print_memory_descriptor_attribute(UINT64 attribute)
 
 void print_memory_map(const UEFI::MemoryMap &map)
 {
-    for (size_t i = 0; i < map.memory_map_size / map.descriptor_size; ++i) {
+    const auto num_descriptors = map.memory_map_size / map.descriptor_size;
+
+    for (unsigned int i = 0; i < num_descriptors; ++i) {
         const void *ptr = (uint8_t *)map.memory_map + map.descriptor_size * i;
         const EFI_MEMORY_DESCRIPTOR &desc = *(EFI_MEMORY_DESCRIPTOR *)ptr;
 
         printf("Type: %s\n", UEFI::memory_type_to_string((EFI_MEMORY_TYPE)desc.Type));
-        size_t size = desc.NumberOfPages * 4096;
+
+        const size_t size = desc.NumberOfPages * 4096;
         printf("Physical range: 0x%p -> 0x%p | %zu bytes\n", (void *)desc.PhysicalStart,
                (uint8_t *)desc.PhysicalStart + size, size);
+
         printf("Attributes: ");
         print_memory_descriptor_attribute(desc.Attribute);
         printf("\n");
