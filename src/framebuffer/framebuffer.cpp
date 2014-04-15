@@ -19,6 +19,7 @@
 #include <font/font.h>
 #include <lib/string.h>
 #include <misc.h>
+#include <lib/assert.h>
 
 // Framebuffer start address
 static uint32_t *g_framebuffer;
@@ -90,7 +91,7 @@ void Framebuffer::init(const EFI_GRAPHICS_OUTPUT_PROTOCOL &gop)
     }
 }
 
-// Move every line until except the first one up, make last row blank
+// Move every line until the current one up, make current row blank
 static void scroll()
 {
     const auto limit = g_current_height * g_pixels_per_scan_line;
@@ -148,6 +149,8 @@ void Framebuffer::put_char(char c, Framebuffer::Color fg, Framebuffer::Color bg)
 
 void Framebuffer::put_string(const char *s, Framebuffer::Color fg, Framebuffer::Color bg)
 {
+    assert(s != nullptr);
+
     for (; *s != '\0'; ++s)
         Framebuffer::put_char(*s, fg, bg);
 }

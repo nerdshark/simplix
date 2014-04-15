@@ -63,6 +63,8 @@ const CHAR16 *UEFI::error_to_string(EFI_STATUS status)
 
 void UEFI::die(const EFI_SYSTEM_TABLE &systab, EFI_STATUS status, const CHAR16 *msg)
 {
+    assert(msg != nullptr);
+
     UEFI::print(systab, msg);
     UEFI::print(systab, L": ");
     UEFI::print(systab, UEFI::error_to_string(status));

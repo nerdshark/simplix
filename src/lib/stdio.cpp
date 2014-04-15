@@ -18,6 +18,7 @@
 #include <lib/stdio.h>
 #include <lib/math.h>
 #include <framebuffer/framebuffer.h>
+#include <lib/assert.h>
 
 enum CaseSensitivity {
     UPPERCASE,
@@ -33,6 +34,8 @@ static int unsigned_num_to_str(char *str, size_t size, uintmax_t x, int base,
 
 int vprintf(const char *__restrict format, va_list ap)
 {
+    assert(format != nullptr);
+
     // You may ask yourself: why 2048 bytes for buf???
     // Answer: that's the amount I can allocate here without causing
     // an 'undefined blabla ___chkstk_ms' gcc failure.
@@ -50,6 +53,8 @@ int vprintf(const char *__restrict format, va_list ap)
 
 int printf(const char *__restrict format, ...)
 {
+    assert(format != nullptr);
+
     va_list ap;
     va_start(ap, format);
     int ret = vprintf(format, ap);
@@ -59,6 +64,9 @@ int printf(const char *__restrict format, ...)
 
 int sprintf(char *__restrict str, const char *__restrict format, ...)
 {
+    assert(str != nullptr);
+    assert(format != nullptr);
+
     va_list ap;
     va_start(ap, format);
     int ret = vsnprintf(str, INT_MAX, format, ap);
@@ -68,6 +76,9 @@ int sprintf(char *__restrict str, const char *__restrict format, ...)
 
 int snprintf(char *__restrict str, size_t size, const char *__restrict format, ...)
 {
+    assert(str != nullptr);
+    assert(format != nullptr);
+
     va_list ap;
     va_start(ap, format);
     int ret = vsnprintf(str, size, format, ap);
@@ -77,11 +88,17 @@ int snprintf(char *__restrict str, size_t size, const char *__restrict format, .
 
 int vsprintf(char *__restrict str, const char *__restrict format, va_list ap)
 {
+    assert(str != nullptr);
+    assert(format != nullptr);
+
     return vsnprintf(str, INT_MAX, format, ap);
 }
 
 int vsnprintf(char *__restrict str, size_t size, const char *__restrict format, va_list ap)
 {
+    assert(str != nullptr);
+    assert(format != nullptr);
+
     int cnt = 0;
 
     while (*format != '\0') {
@@ -451,6 +468,7 @@ int vsnprintf(char *__restrict str, size_t size, const char *__restrict format, 
         case 's': {
             ++format;
             char *val = va_arg(ap, char *);
+
             for (; *val != '\0'; ++val) {
                 if ((size_t)cnt < size)
                     str[cnt] = *val;
@@ -460,6 +478,7 @@ int vsnprintf(char *__restrict str, size_t size, const char *__restrict format, 
         case 'p': {
             ++format;
             void *val = va_arg(ap, void *);
+
             int ret = unsigned_num_to_str(str+cnt, size-cnt, (uintmax_t)val, 16, LOWERCASE);
             if (ret == -1 || add_would_overflow(cnt, ret, INT_MAX))
                 return -1;
@@ -485,6 +504,8 @@ int vsnprintf(char *__restrict str, size_t size, const char *__restrict format, 
 int signed_num_to_str(char *str, size_t size, intmax_t x, int base,
                       CaseSensitivity case_sensitivity)
 {
+    assert(str != nullptr);
+
     int cnt = 0;
 
     if (x < 0) {
@@ -505,6 +526,8 @@ int signed_num_to_str(char *str, size_t size, intmax_t x, int base,
 int unsigned_num_to_str(char *str, size_t size, uintmax_t x, int base,
                         CaseSensitivity case_sensitivity)
 {
+    assert(str != nullptr);
+
     int cnt = 0;
 
     do {
@@ -536,6 +559,8 @@ int digit_to_char(int x, CaseSensitivity case_sensitivity)
 
 void *mem_reverse_inplace(void *s, size_t size)
 {
+    assert(s != nullptr);
+
     unsigned char *p = (unsigned char *)s;
     for (size_t i = size-1, j = 0; j < i; --i, ++j) {
         unsigned char c = p[i];

@@ -20,6 +20,7 @@
 #include <lib/math.h>
 #include <lib/string.h>
 #include <lib/error.h>
+#include <lib/assert.h>
 
 static int char_to_value(char c)
 {
@@ -38,6 +39,8 @@ static int char_to_value(char c)
 uintmax_t strtoumax(const char *__restrict nptr, char **__restrict endptr,
                     int base, Error::Code &err)
 {
+    assert(nptr != nullptr);
+
     if ((base < 2 || base > 36) && base != 0) {
         err = Error::Code::EINVAL;
         return 0;
@@ -124,6 +127,8 @@ end:
 intmax_t strtoimax(const char *__restrict nptr, char **__restrict endptr,
                    int base, Error::Code &err)
 {
+    assert(nptr != nullptr);
+
     if ((base < 2 || base > 36) && base != 0) {
         err = Error::Code::EINVAL;
         return -1;
@@ -221,6 +226,8 @@ end:
 unsigned long long strtoull(const char *__restrict nptr, char **__restrict endptr,
                             int base, Error::Code &err)
 {
+    assert(nptr != nullptr);
+
     uintmax_t val = strtoumax(nptr, endptr, base, err);
 
     if (val > ULLONG_MAX) {
@@ -234,6 +241,8 @@ unsigned long long strtoull(const char *__restrict nptr, char **__restrict endpt
 long long strtoll(const char *__restrict nptr, char **__restrict endptr,
                   int base, Error::Code &err)
 {
+    assert(nptr != nullptr);
+
     intmax_t val = strtoimax(nptr, endptr, base, err);
 
     if (val > LLONG_MAX) {
@@ -251,6 +260,8 @@ long long strtoll(const char *__restrict nptr, char **__restrict endptr,
 long strtol(const char *__restrict nptr, char **__restrict endptr,
             int base, Error::Code &err)
 {
+    assert(nptr != nullptr);
+
     intmax_t val = strtoimax(nptr, endptr, base, err);
 
     if (val > LONG_MAX) {
@@ -268,6 +279,8 @@ long strtol(const char *__restrict nptr, char **__restrict endptr,
 unsigned long strtoul(const char *__restrict nptr, char **__restrict endptr,
                       int base, Error::Code &err)
 {
+    assert(nptr != nullptr);
+
     uintmax_t val = strtoumax(nptr, endptr, base, err);
 
     if (val > ULONG_MAX) {
